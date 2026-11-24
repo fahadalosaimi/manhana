@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منحنى التمر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE warm everyday health tool for every age: plain Saudi talk, big clear numbers, calm motion
+   IDEA a Sadu-woven date-seller's stall: woven bands frame the page, the meal is an order, the reading a trace
+   PICTURE the live glucose curve drawing itself, target band shaded; a Ramadan night scene above a 24-hour curve
+   COLOUR date brown dominant, sand support, crimson accent for high readings, teal for "your curve"; Ramadan band fixed night indigo
+   TYPE Readex Pro display + IBM Plex Sans Arabic text
+   LAYOUT laptop: woven nav, title + meal box, full-width chart, stat row; steps; items | calibration; Ramadan night band; phone: stacked in that order */
+:root{color-scheme:light dark;--bg:light-dark(#fffdf9,#120d0a);--ink:light-dark(#1d140e,#f5ede4);--mute:light-dark(#6a5a4d,#bfae9c);--date:light-dark(#6b3a1c,#e0a26c);--date2:light-dark(#8f4f26,#b97842);--sand:light-dark(#f6ecdd,#1f1712);--card:light-dark(#ffffff,#1a130f);--line:light-dark(#e6d7c3,#3a2c21);--hi:light-dark(#c8243a,#ff6b7d);--b:light-dark(#3d5a73,#93b8d6);--me:light-dark(#137a68,#5fd6be);--onDate:light-dark(#fffdf9,#120d0a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+html{scroll-padding-top:80px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:17px/1.65 "IBM Plex Sans Arabic","Readex Pro",Tahoma,sans-serif;overflow-x:clip}
+body.big{zoom:1.15}
+.band{padding:clamp(26px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+h1{font:700 clamp(32px,5vw,54px)/1.08 "Readex Pro",sans-serif;margin:0 0 10px;text-wrap:balance;letter-spacing:-.01em}
+h2{font:700 clamp(24px,3vw,32px)/1.2 "Readex Pro",sans-serif;margin:0 0 10px;text-wrap:balance}
+h3{font:600 19px/1.3 "Readex Pro",sans-serif;margin:0 0 6px}
+p{margin:0 0 10px}
+a{color:var(--date)}
+.lead{color:var(--mute);max-width:64ch;font-size:18px}
+.note{font-size:15px;color:var(--mute)}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--date) 60%,transparent);outline-offset:2px}
+button{font:600 16px "IBM Plex Sans Arabic","Readex Pro",sans-serif;min-height:48px;padding:0 18px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:transform .15s,background .2s}
+button:active{transform:scale(.97)}
+button.go{background:var(--date);color:var(--onDate);border-color:var(--date)}
+button:disabled{opacity:.6;cursor:wait}
+button[aria-pressed=true]{background:var(--date);color:var(--onDate);border-color:var(--date)}
+[hidden]{display:none!important}
+/* woven Sadu strip */
+.sadu{display:block;width:100%;height:26px}
+.drift{animation:drift 40s linear infinite}
+@keyframes drift{to{transform:translateX(-96px)}}
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.navin{max-width:1240px;margin:0 auto;padding:8px max(5vw,16px);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font:700 22px "Readex Pro",sans-serif;color:var(--ink);text-decoration:none;margin-inline-end:auto}
+.links{display:flex;gap:4px;flex-wrap:wrap}
+.links a{color:var(--ink);text-decoration:none;padding:10px 12px;border-radius:12px;font-weight:600}
+.links a:hover{background:var(--sand)}
+.tools{display:flex;gap:6px}
+.tools button{min-height:44px;min-width:44px;padding:0 12px}
+/* hero */
+.hero{background:var(--sand)}
+.ask{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;margin-top:18px}
+textarea,input{font:17px/1.5 "IBM Plex Sans Arabic","Readex Pro",sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px}
+textarea{padding:12px 14px;resize:vertical;min-height:56px}
+#mic.on{background:var(--hi);color:#fff;border-color:var(--hi);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--hi) 25%,transparent)}}
+.status{min-height:26px;font-size:15px;color:var(--mute);margin-top:6px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border-radius:24px;min-height:44px}
+.fig{position:relative;height:clamp(300px,40vw,420px);margin-top:14px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+svg text{font:14px "IBM Plex Sans Arabic","Readex Pro",sans-serif;fill:var(--mute);paint-order:stroke;stroke:var(--sand);stroke-width:4px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px;font-size:15px;color:var(--mute)}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;margin-inline-end:6px}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(11em,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.stat b{display:block;font:700 clamp(28px,3.4vw,38px)/1.1 "Readex Pro",sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums}
+.stat span{font-size:15px;color:var(--mute)}
+.stat small{display:block;font-size:14px;color:var(--mute)}
+.hi{color:var(--hi)}.ok{color:var(--me)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;animation:rise .6s both}
+.step:nth-child(2){animation-delay:.08s}.step:nth-child(3){animation-delay:.16s}.step:nth-child(4){animation-delay:.24s}
+@keyframes rise{from{transform:translateY(14px)}}
+.step svg{width:100%;height:96px;display:block;margin-bottom:8px}
+.step .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--date);color:var(--onDate);font:700 15px "Readex Pro";margin-inline-end:6px}
+.gloss{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.gloss div{border-inline-start:4px solid var(--date);padding:4px 12px}
+.gloss b{display:block;font-family:"Readex Pro"}
+/* panels */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;border-top:6px solid var(--date)}
+.panel.me{border-top-color:var(--me)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:start;vertical-align:middle}
+th{font-weight:600;color:var(--mute);font-size:14px}
+td.n,th.n{text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+td input{width:4.4em;min-height:42px;padding:4px 8px}
+.tag{display:inline-block;font-size:13px;line-height:1.3;padding:2px 8px;border-radius:10px;background:var(--sand);color:var(--mute)}
+.tag.s{background:color-mix(in srgb,var(--date) 18%,transparent);color:var(--date)}
+.chk{display:flex;align-items:center;gap:10px;min-height:46px;cursor:pointer}
+.chk input{width:22px;height:22px;accent-color:var(--date);flex:none}
+.rd{display:grid;grid-template-columns:repeat(auto-fit,minmax(7.5em,1fr));gap:10px;margin:10px 0}
+.rd label,.f label{font-size:14px;color:var(--mute);display:block}
+.rd input{width:100%;min-height:46px;padding:6px 10px}
+.warn{background:var(--sand);border-radius:14px;padding:14px 16px;border-inline-start:5px solid var(--hi);margin-top:12px}
+/* Ramadan night: fixed palette */
+.night{--nbg:#0f1530;--nink:#f4efe4;--nmute:#b8bfd9;--gold:#e8b45a;--nline:#2a3360;background:linear-gradient(#0b1026,#141c3d);color:var(--nink);position:relative;overflow:hidden}
+.night .lead,.night .note,.night .f label{color:var(--nmute)}
+.sky{position:absolute;inset:0 0 auto 0;height:92px;width:100%;pointer-events:none}
+.night{padding-top:104px}
+.msub{display:none;font-size:13px;color:var(--mute);margin-top:2px}
+.tw{animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.25}}
+.night .wrap{position:relative}
+.night .panel{background:#151d42;border-color:var(--nline);border-top-color:var(--gold);color:var(--nink)}
+.night textarea,.night input{background:#0f1533;color:var(--nink);border-color:var(--nline)}
+.night .stat{background:#151d42;border-color:var(--nline)}
+.night .stat span,.night .stat small{color:var(--nmute)}
+.night svg text{fill:var(--nmute);stroke:#121a3a}
+.night button{background:#151d42;color:var(--nink);border-color:var(--nline)}
+.night button.go{background:var(--gold);color:#141020;border-color:var(--gold)}
+.night .warn{background:#151d42;border-inline-start-color:#ff7d8e}
+.night a{color:var(--gold)}
+.night .chk input{accent-color:var(--gold)}
+.night .fig{height:clamp(300px,36vw,400px)}
+.meals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.f{display:grid;gap:6px}
+.f .tm{display:flex;gap:8px;align-items:center}
+.f input[type=time]{min-height:44px;padding:4px 8px;width:8.5em}
+footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--mute);font-size:15px}
+@media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.meals{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.cols,.gloss{grid-template-columns:minmax(0,1fr)}.ask{grid-template-columns:minmax(0,1fr) auto}.ask textarea{grid-column:1/-1}.links{order:3;width:100%;justify-content:space-between}}
+@media(max-width:600px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:12px}.stat b{font-size:26px}.it th:nth-child(2),.it td:nth-child(2),.it th:nth-child(5),.it td:nth-child(5){display:none}.msub{display:block}}
+@media(max-width:460px){.steps{grid-template-columns:minmax(0,1fr)}.tools button{padding:0 10px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="sadu" width="48" height="26" patternUnits="userSpaceOnUse">
+    <rect width="48" height="26" fill="var(--date)"/>
+    <polygon points="0,26 12,9 24,26" fill="var(--hi)"/><polygon points="24,26 36,9 48,26" fill="var(--sand)"/>
+    <polygon points="12,0 18,6 12,12 6,6" fill="var(--sand)"/><polygon points="36,0 42,6 36,12 30,6" fill="var(--hi)"/>
+    <rect y="0" width="48" height="2" fill="var(--ink)" opacity=".35"/>
+  </pattern>
+</defs></svg>
+
+<nav>
+  <svg class="sadu" aria-hidden="true" style="height:10px"><rect class="drift" width="200%" height="10" fill="url(#sadu)"/></svg>
+  <div class="navin">
+    <a class="brand" href="#top" aria-label="منحنى">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><ellipse cx="17" cy="19" rx="10" ry="13" fill="var(--date)"/><ellipse cx="13" cy="15" rx="3" ry="6" fill="var(--date2)"/><path d="M17 6c1-3 4-5 7-5" stroke="var(--me)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+      <span data-t="brand">منحنى</span>
+    </a>
+    <div class="links"><a href="#meal" data-t="navMeal">وجبتك</a><a href="#how" data-t="navHow">كيف يشتغل</a><a href="#ramadan" data-t="navRam">رمضان</a></div>
+    <div class="tools">
+      <button type="button" id="bLang" aria-label="English">EN</button>
+      <button type="button" id="bTheme" aria-label="الوضع"></button>
+      <button type="button" id="bFont" aria-pressed="false">أ+</button>
+    </div>
+  </div>
+</nav>
+
+<header class="band hero" id="top">
+  <div class="wrap" id="meal">
+    <h1 data-t="h1">وش أكلت؟ نوريك وش بيسوي في سكرك</h1>
+    <p class="lead" data-t="lead">اكتب أكلك أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.</p>
+    <div class="ask">
+      <textarea id="mealTxt" rows="2" data-ta="mealAria" aria-label="وش أكلت"></textarea>
+      <button type="button" id="mic" hidden data-t="mic">قلها بصوتك</button>
+      <button type="button" class="go" id="go" data-t="go">احسب</button>
+    </div>
+    <div class="status" id="status" role="status"></div>
+    <div class="row">
+      <div class="seg" role="group" id="profiles"></div>
+      <button type="button" id="listen" hidden data-t="listen">اسمع النتيجة</button>
+    </div>
+    <div class="fig" role="img" data-ta="chartAria" aria-label="منحنى السكر"><svg id="chart"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--date)"></i><span data-t="lgMeal">وجبتك</span></span>
+      <span><i style="background:var(--b)"></i><span data-t="lgAlt">لو غيّرت</span></span>
+      <span><i style="background:var(--me)"></i><span data-t="lgMe">منحناك أنت</span></span>
+      <span><i style="background:var(--ink);width:10px;height:10px;border-radius:50%"></i><span data-t="lgRd">قراءاتك</span></span>
+      <span><i style="background:var(--hi);height:2px"></i><span data-t="lgLim">حد ١٨٠</span></span>
+    </div>
+    <div class="figs" id="figs"></div>
+  </div>
+</header>
+<svg class="sadu" aria-hidden="true"><rect class="drift" width="200%" height="26" fill="url(#sadu)"/></svg>
+
+<section class="band" id="how">
+  <div class="wrap">
+    <h2 data-t="howH">سهل، أربع خطوات</h2>
+    <div class="steps">
+      <div class="step"><svg viewBox="0 0 200 96" aria-hidden="true"><rect x="20" y="14" width="130" height="56" rx="18" fill="var(--sand)"/><path d="M50 70l-8 18 26-18z" fill="var(--sand)"/><ellipse cx="62" cy="42" rx="11" ry="15" fill="var(--date)"/><ellipse cx="88" cy="42" rx="11" ry="15" fill="var(--date2)"/><ellipse cx="114" cy="42" rx="11" ry="15" fill="var(--date)"/><circle cx="170" cy="40" r="18" fill="var(--me)" opacity=".85"/><rect x="164" y="28" width="12" height="18" rx="6" fill="var(--card)"/></svg><h3><span class="num">١</span><span data-t="s1h">قل وش أكلت</span></h3><p class="note" data-t="s1p"></p></div>
+      <div class="step"><svg viewBox="0 0 200 96" aria-hidden="true"><rect x="10" y="40" width="180" height="40" fill="var(--sand)"/><line x1="10" y1="32" x2="190" y2="32" stroke="var(--hi)" stroke-dasharray="5 4" stroke-width="2"/><path d="M10 74C50 74 60 12 100 14s50 56 90 58" fill="none" stroke="var(--date)" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="14" r="6" fill="var(--date)"/></svg><h3><span class="num">٢</span><span data-t="s2h">شوف المنحنى</span></h3><p class="note" data-t="s2p"></p></div>
+      <div class="step"><svg viewBox="0 0 200 96" aria-hidden="true"><path d="M10 74C50 74 60 12 100 14s50 56 90 58" fill="none" stroke="var(--line)" stroke-width="4"/><path d="M10 74C50 74 66 36 100 38s50 34 90 36" fill="none" stroke="var(--b)" stroke-width="4" stroke-dasharray="8 5"/><circle cx="160" cy="22" r="7" fill="var(--b)"/><path d="M160 30l-2 16-8 14M158 46l9 13M159 36l-10 6M160 36l10 4" stroke="var(--b)" stroke-width="4" stroke-linecap="round" fill="none"/></svg><h3><span class="num">٣</span><span data-t="s3h">جرّب «لو غيّرت»</span></h3><p class="note" data-t="s3p"></p></div>
+      <div class="step"><svg viewBox="0 0 200 96" aria-hidden="true"><rect x="56" y="8" width="70" height="84" rx="16" fill="var(--me)"/><rect x="66" y="18" width="50" height="30" rx="6" fill="var(--card)"/><text x="91" y="40" text-anchor="middle" style="font:700 16px Readex Pro;fill:var(--me);stroke:none">١٤٦</text><circle cx="91" cy="70" r="10" fill="var(--card)"/><path d="M140 70C150 70 156 40 170 40s14 26 24 26" fill="none" stroke="var(--me)" stroke-width="4"/><circle cx="170" cy="40" r="5" fill="var(--ink)"/></svg><h3><span class="num">٤</span><span data-t="s4h">اضبطه على جسمك</span></h3><p class="note" data-t="s4p"></p></div>
+    </div>
+    <div class="gloss">
+      <div><b data-t="g1h"></b><span class="note" data-t="g1p"></span></div>
+      <div><b data-t="g2h"></b><span class="note" data-t="g2p"></span></div>
+      <div><b data-t="g3h"></b><span class="note" data-t="g3p"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" style="padding-top:0">
+  <div class="wrap cols">
+    <div class="panel">
+      <h2 data-t="itH">وش فهمنا من أكلك</h2>
+      <p class="note" id="parsedBy"></p>
+      <div class="scroll"><table class="it">
+        <thead><tr><th data-t="thFood"></th><th data-t="thQty"></th><th class="n" data-t="thCarb"></th><th class="n" data-t="thGi"></th><th data-t="thSrc"></th></tr></thead>
+        <tbody id="items"></tbody>
+      </table></div>
+      <h3 style="margin-top:18px" data-t="wiH">لو غيّرت شوي؟</h3>
+      <label class="chk"><input type="checkbox" id="wHalf"><span data-t="wHalf"></span></label>
+      <label class="chk"><input type="checkbox" id="wWalk" checked><span data-t="wWalk"></span></label>
+      <label class="chk"><input type="checkbox" id="wSwap" checked><span data-t="wSwap"></span></label>
+    </div>
+    <div class="panel me">
+      <h2 data-t="calH">اضبطه على جسمك</h2>
+      <p data-t="calP"></p>
+      <div class="rd" id="readings"></div>
+      <button type="button" class="go" id="fit" style="background:var(--me);border-color:var(--me)" data-t="calBtn">اضبط منحناي</button>
+      <div class="figs" id="fitOut"></div>
+      <p class="note" id="fitNote"></p>
+    </div>
+  </div>
+</section>
+
+<section class="band night" id="ramadan">
+  <svg class="sky" id="sky" aria-hidden="true"></svg>
+  <div class="wrap">
+    <h2 data-t="ramH">يومك في رمضان</h2>
+    <p class="lead" data-t="ramLead"></p>
+    <div class="meals">
+      <div class="f panel"><label for="rIft" data-t="rIft">الفطور</label><textarea id="rIft" rows="2"></textarea><div class="tm"><label for="tIft" data-t="rTime">الوقت</label><input type="time" id="tIft" value="18:00"></div></div>
+      <div class="f panel"><label for="rMain" data-t="rMain">الأكل بعد الصلاة</label><textarea id="rMain" rows="2"></textarea><p class="note" style="margin:0" data-t="rMainN"></p></div>
+      <div class="f panel"><label for="rSuh" data-t="rSuh">السحور</label><textarea id="rSuh" rows="2"></textarea><div class="tm"><label for="tSuh" data-t="rTime">الوقت</label><input type="time" id="tSuh" value="04:00"></div></div>
+    </div>
+    <div class="row">
+      <button type="button" class="go" id="ramGo" data-t="ramGo">ارسم يومي</button>
+      <label class="chk"><input type="checkbox" id="rSplit" checked><span data-t="rSplit"></span></label>
+      <label class="chk"><input type="checkbox" id="rWalk" checked><span data-t="rWalk"></span></label>
+    </div>
+    <div class="status" id="ramStatus" role="status"></div>
+    <div class="fig" role="img" data-ta="ramAria"><svg id="ramChart"></svg></div>
+    <div class="legend" style="color:var(--nmute)">
+      <span><i style="background:#e0a26c"></i><span data-t="lgPlan">كله مرة وحدة</span></span>
+      <span><i style="background:#93b8d6"></i><span data-t="lgPlan2">مقسّم مع التراويح</span></span>
+      <span><i style="background:#ff7d8e;height:2px"></i><span data-t="lgLim">حد ١٨٠</span></span>
+    </div>
+    <div class="figs" id="ramFigs"></div>
+    <div class="warn"><span data-t="ramWarn"></span> <a href="https://www.mdcalc.com/calc/10522/international-diabetes-federation-diabetes-ramadan-alliance-idf-dar-fasting-risk-assessment" data-t="ramLink">حاسبة IDF-DAR</a></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap cols">
+    <div>
+      <h2 data-t="giH">التمر السعودي: وش يرفع أكثر؟</h2>
+      <div class="scroll"><table><tbody id="gi"></tbody></table></div>
+      <p class="note"><span data-t="giN1"></span> <a href="https://pubmed.ncbi.nlm.nih.gov/27920411/" data-t="giSrc">دراسة جامعة القصيم ٢٠١٦</a>. <span data-t="giN2"></span></p>
+    </div>
+    <div>
+      <h2 data-t="mH">كيف نحسبها</h2>
+      <p data-t="m1"></p>
+      <p data-t="m2"></p>
+      <div class="warn" data-t="disc"></div>
+    </div>
+  </div>
+</section>
+<svg class="sadu" aria-hidden="true"><rect class="drift" width="200%" height="26" fill="url(#sadu)"/></svg>
+<footer><div class="wrap" data-t="foot"></div></footer>
+
+<script>
+{
+const L={
+ar:{dir:'rtl',brand:'منحنى',navMeal:'وجبتك',navHow:'كيف يشتغل',navRam:'رمضان',h1:'وش أكلت؟ نوريك وش بيسوي في سكرك',lead:'اكتب أكلك أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.',mealAria:'وش أكلت',mic:'قلها بصوتك',micStop:'وقّف',go:'احسب',listen:'اسمع النتيجة',listenStop:'وقّف الصوت',chartAria:'منحنى السكر المتوقع',ramAria:'منحنى السكر في يوم رمضان',
+lgMeal:'وجبتك',lgAlt:'لو غيّرت',lgMe:'منحناك أنت',lgRd:'قراءاتك',lgLim:'حد ١٨٠',lgPlan:'كله مرة وحدة',lgPlan2:'مقسّم مع التراويح',
+pf:{healthy:'سليم',pre:'عنده بداية سكر',t2d:'سكري نوع ٢'},
+howH:'سهل، أربع خطوات',s1h:'قل وش أكلت',s1p:'اكتب أو تكلم بلهجتك. نفهم «صحن كبسة» و«ثلاث تمرات» ونحسب النشويات.',s2h:'شوف المنحنى',s2p:'الخط البني سكرك ساعة بساعة. المنطقة الفاتحة هي الطبيعي، والخط الأحمر حد ١٨٠.',s3h:'جرّب «لو غيّرت»',s3p:'نص الكمية، مشي ربع ساعة، أو تمر سكري بداله، وشوف الفرق على طول.',s4h:'اضبطه على جسمك',s4p:'إذا عندك جهاز سكر، حط قراءاتك ونعدّل المنحنى عليك أنت.',
+g1h:'النشويات (الكارب)',g1p:'السكر والنشا اللي في الأكل، وهي اللي ترفع السكر.',g2h:'المؤشر السكري',g2p:'سرعة الأكلة في رفع السكر، من صفر إلى ١٠٠. كل ما زاد، رفع أسرع.',g3h:'ملغ/دل',g3p:'الوحدة اللي يقرأ فيها جهاز السكر. الطبيعي بعد الأكل تحت ١٨٠.',
+itH:'وش فهمنا من أكلك',thFood:'الأكلة',thQty:'الكمية',thCarb:'نشويات (غ)',thGi:'المؤشر',thSrc:'المصدر',src:{study:'دراسة سعودية',avg:'متوسط الدراسة',table:'تقدير جدول',estimate:'تقدير AI'},
+byAI:'فهمها الذكاء الاصطناعي من كلامك. تقدر تعدّل الأرقام.',byLocal:'قريناها بقاموسنا. تقدر تعدّل الأرقام.',byEx:'هذا مثال جاهز. اكتب أكلك فوق واضغط «احسب».',noItems:'ما عرفنا الأكل. جرّب تكتبه أوضح، مثل «٣ تمرات سكري وكوب حليب».',
+wiH:'لو غيّرت شوي؟',wHalf:'آكل نص الكمية',wWalk:'أمشي ربع ساعة بعد الأكل',wSwap:'تمر سكري بدل التمر اللي أكلته',
+calH:'اضبطه على جسمك',calP:'حط قراءات جهاز السكر بعد هالوجبة، ونعدّل المنحنى على جسمك أنت.',calBtn:'اضبط منحناي',rd0:'صايم قبل الأكل',rdT:'بعد {m} د',calEx:'القراءات اللي تشوفها مثال. حط قراءاتك بدالها.',calDone:'منحناك الأخضر صار مضبوط على قراءاتك. كل ما زادت قراءاتك صار أدق.',calNeed:'نحتاج قراءتين على الأقل.',fBefore:'الفرق قبل',fAfter:'الفرق بعد',fUnit:'ملغ/دل بالمتوسط',fGain:'تحسّن الدقة',fOn:'على {n} قراءات',
+stPeak:'أعلى ما يوصل',stPeakS:'بعد {m} دقيقة · {c} غ نشويات',stAbove:'وقت فوق ١٨٠',stAboveS:'وبعد ساعتين {v}',stAlt:'لو غيّرت',stAltS:'أقل بـ {d}',stMe:'منحناك أنت',stMeS:'مضبوط على قراءاتك',min:'د',peakL:'أعلى {v}',eat:'الأكل',hr:'{h} س',
+stReading:'لحظة، نقرا أكلك…',stDone:'تم، هذا منحنى سكرك المتوقع.',stLocal:'قريناها بقاموسنا المحلي.',stRate:'الطلبات كثيرة الحين، استخدمنا قاموسنا.',stEmpty:'اكتب وش أكلت أول.',micNo:'الميكروفون مو مسموح، اكتب أكلك.',micErr:'ما اشتغل الميكروفون، جرّب مرة ثانية.',
+ramH:'يومك في رمضان',ramLead:'حط فطورك وسحورك، ونرسم سكرك من العصر لين عصر اليوم اللي بعده. وشوف وش يصير لو قسّمت فطورك ومشيت في التراويح.',rIft:'الفطور (أول ما تفطر)',rMain:'الأكل بعد الصلاة',rMainN:'إذا ما قسّمت، نحسبه مع الفطور على طول.',rSuh:'السحور',rTime:'الوقت',ramGo:'ارسم يومي',rSplit:'أقسّم: تمر وماء، وبعد الصلاة الأكل',rWalk:'أمشي في التراويح ٤٠ دقيقة',fast:'صيام',
+rmPeak:'أعلى بعد الفطور',rmPeakS:'الساعة {h}',rmPeak2:'لو قسّمت',rmPeak2S:'أقل بـ {d}',rmAbove:'وقت فوق ١٨٠',rmAboveS:'في اليوم كله',rmSuh:'أعلى بعد السحور',
+ramWarn:'الهبوط وقت الصيام يجي غالبًا من بعض أدوية السكر والإنسولين، ونموذجنا ما يحسب الأدوية. قبل رمضان قيّم خطر صيامك مع طبيبك بـ',ramLink:'حاسبة IDF-DAR',
+giH:'التمر السعودي: وش يرفع أكثر؟',giN1:'القيم من',giSrc:'دراسة جامعة القصيم على ١٧ صنفًا (٢٠١٦)',giN2:'الدراسة ما لقت فرق مهم في المؤشر بين الأصناف، لكن الحمل السكري فرق بوضوح. يعني الكمية أهم من الصنف.',
+mH:'كيف نحسبها',m1:'نموذج يتبع الأكل من المعدة للدم (حجرتين)، مع نموذج Bergman المصغّر للسكر والإنسولين. ضبطنا الملفات بحيث قراءة الساعتين بعد ٧٥ غ جلوكوز تطلع في حدودها الطبية: تحت ١٤٠ للسليم، ١٤٠–١٩٩ لبداية السكر، و٢٠٠ فوق للسكري.',m2:'المعايرة تجرّب ٤٤١ تركيبة وتختار الأقرب لقراءاتك. قراءات وجبة وحدة تضبط شكل منحناك، لكنها ما تكفي تفصل بين حساسية الإنسولين وإفرازه، فما نعرضها كأرقام طبية. قيم التمر من دراسة سعودية، وباقي الأكل تقديرية ومعلّمة.',
+disc:'أداة تعليمية تقريبية، ما تعطي جرعات دواء ولا إنسولين. أي قرار علاجي، خصوصًا الصيام، يكون مع طبيبك.',foot:'منحنى · نموذج تعليمي لهاكاثون نُمكّن للذكاء الاصطناعي ٢٠٢٦. ما يغني عن الطبيب.',
+theme:{auto:'تلقائي',light:'فاتح',dark:'داكن'},
+say:(o)=>`أعلى سكر بيوصل له تقريبًا ${o.peak}، بعد ${o.at} دقيقة من الأكل. ${o.above>0?`وبيقعد فوق المية وثمانين حوالي ${o.above} دقيقة.`:'وما بيتعدى المية وثمانين.'} ولو غيّرت مثل ما اخترت، أعلى رقم بينزل لـ ${o.alt}.`,
+ex:{meal:'فطرت ٥ تمرات سلج وحبة صامولي وفنجالين قهوة',ift:'٣ تمرات خلاص وكاسة ماء',main:'صحن شوربة وسمبوسة ٢ وصحن كبسة',suh:'صحن فول وخبز وكاسة لبن'}},
+en:{dir:'ltr',brand:'Manhana',navMeal:'Your meal',navHow:'How it works',navRam:'Ramadan',h1:'What did you eat? See what it does to your sugar',lead:'Type your meal or say it out loud, the way you talk, and we draw what your blood sugar will do over the next four hours.',mealAria:'What did you eat',mic:'Say it',micStop:'Stop',go:'Calculate',listen:'Read it to me',listenStop:'Stop reading',chartAria:'Expected blood sugar curve',ramAria:'Blood sugar across a Ramadan day',
+lgMeal:'Your meal',lgAlt:'If you change',lgMe:'Your own curve',lgRd:'Your readings',lgLim:'180 limit',lgPlan:'All at once',lgPlan2:'Split, with taraweeh walk',
+pf:{healthy:'Healthy',pre:'Prediabetes',t2d:'Type 2 diabetes'},
+howH:'Easy, four steps',s1h:'Say what you ate',s1p:'Type or talk naturally. We understand "a plate of kabsa" and "three dates" and count the carbs.',s2h:'See the curve',s2p:'The brown line is your sugar, hour by hour. The light band is normal; the red line is 180.',s3h:'Try "what if"',s3p:'Half the portion, a 15-minute walk, or Sukkari dates instead, and see the difference instantly.',s4h:'Tune it to your body',s4p:'If you have a glucose meter, enter your readings and we fit the curve to you.',
+g1h:'Carbs',g1p:'The sugar and starch in food. They are what raise blood sugar.',g2h:'Glycemic index',g2p:'How fast a food raises sugar, from 0 to 100. Higher means faster.',g3h:'mg/dL',g3p:'The unit your glucose meter reads. After a meal, under 180 is the usual target.',
+itH:'What we understood',thFood:'Food',thQty:'Amount',thCarb:'Carbs (g)',thGi:'GI',thSrc:'Source',src:{study:'Saudi study',avg:'Study average',table:'Table estimate',estimate:'AI estimate'},
+byAI:'Read by AI from your words. You can edit the numbers.',byLocal:'Read with our local dictionary. You can edit the numbers.',byEx:'A ready example. Type your meal above and press Calculate.',noItems:'We could not recognise the food. Try writing it more plainly, like "3 sukkari dates and a glass of milk".',
+wiH:'What if you changed a little?',wHalf:'Eat half the amount',wWalk:'Walk 15 minutes after eating',wSwap:'Sukkari dates instead of the dates I ate',
+calH:'Tune it to your body',calP:'Enter your meter readings after this meal and we fit the curve to your own body.',calBtn:'Fit my curve',rd0:'Fasting, before eating',rdT:'After {m} min',calEx:'The readings shown are an example. Replace them with yours.',calDone:'Your green curve now fits your readings. More readings make it more accurate.',calNeed:'We need at least two readings.',fBefore:'Error before',fAfter:'Error after',fUnit:'mg/dL on average',fGain:'Accuracy gain',fOn:'from {n} readings',
+stPeak:'Highest point',stPeakS:'after {m} min · {c} g carbs',stAbove:'Time above 180',stAboveS:'2 hours later: {v}',stAlt:'If you change',stAltS:'{d} lower',stMe:'Your own curve',stMeS:'fitted to your readings',min:'min',peakL:'peak {v}',eat:'meal',hr:'{h} h',
+stReading:'One moment, reading your meal…',stDone:'Done. This is your expected curve.',stLocal:'Read with our local dictionary.',stRate:'Too many requests right now; used our dictionary.',stEmpty:'Type what you ate first.',micNo:'Microphone not allowed; type your meal.',micErr:'The microphone did not start; try again.',
+ramH:'Your day in Ramadan',ramLead:'Enter your iftar and suhoor and we draw your sugar from one afternoon to the next. See what happens if you split iftar and walk during taraweeh.',rIft:'Iftar (when you break the fast)',rMain:'Main meal after prayer',rMainN:'If you do not split, we count it with iftar.',rSuh:'Suhoor',rTime:'Time',ramGo:'Draw my day',rSplit:'Split: dates and water, then the meal after prayer',rWalk:'Walk 40 minutes during taraweeh',fast:'Fasting',
+rmPeak:'Highest after iftar',rmPeakS:'at {h}',rmPeak2:'If you split',rmPeak2S:'{d} lower',rmAbove:'Time above 180',rmAboveS:'across the day',rmSuh:'Highest after suhoor',
+ramWarn:'Lows during fasting mostly come from some diabetes medicines and insulin, and our model does not include medicines. Before Ramadan, assess your fasting risk with your doctor using the',ramLink:'IDF-DAR calculator',
+giH:'Saudi dates: which raise sugar most?',giN1:'Values from the',giSrc:'Qassim University study of 17 varieties (2016)',giN2:'The study found no significant GI difference between varieties, but glycemic load differed clearly: the amount matters more than the variety.',
+mH:'How we calculate',m1:'A two-compartment gut model with the Bergman minimal model of glucose and insulin. Profiles are tuned so the 2-hour value after 75 g glucose falls in its clinical range: under 140 healthy, 140–199 prediabetes, 200+ diabetes.',m2:'Calibration tries 441 combinations and keeps the closest to your readings. One meal of readings fixes the shape of your curve but cannot separate insulin sensitivity from secretion, so we do not show them as medical numbers. Date values come from a Saudi study; other foods are estimates and marked as such.',
+disc:'An educational approximation. It gives no medicine or insulin doses. Any treatment decision, especially fasting, belongs with your doctor.',foot:'Manhana · an educational prototype for the Nmakken AI Hackathon 2026. Not a substitute for your doctor.',
+theme:{auto:'Auto',light:'Light',dark:'Dark'},
+say:(o)=>`Your blood sugar should peak at about ${o.peak}, ${o.at} minutes after eating. ${o.above>0?`It stays above 180 for about ${o.above} minutes.`:'It stays under 180.'} With the changes you chose, the peak drops to ${o.alt}.`,
+ex:{meal:'5 sellaj dates, a samoli roll and 2 cups of Arabic coffee',ift:'3 khalas dates and a glass of water',main:'a bowl of soup, 2 samosas and a plate of kabsa',suh:'a plate of foul, bread and a glass of laban'}}};
+
+const PROFILES={healthy:{Gb:90,SG:0.022,p2:0.035,SI:8e-4,Ib:8,n:0.12,beta:0.13},pre:{Gb:108,SG:0.016,p2:0.025,SI:3e-4,Ib:12,n:0.1,beta:0.06},t2d:{Gb:140,SG:0.012,p2:0.02,SI:1.5e-4,Ib:14,n:0.09,beta:0.035}};
+const DATES=[{k:['سلج','سلّج','sellaj','sillaj'],ar:'تمر سلّج',en:'Sellaj dates',gi:74.6},{k:['مكتومي','maktoomi'],ar:'تمر مكتومي',en:'Maktoomi dates',gi:71.0},{k:['صقعي','saqie','sagai'],ar:'تمر صقعي',en:'Saqie dates',gi:44.6},{k:['سكري','سكرى','sukkari','sukkary'],ar:'تمر سكري',en:'Sukkari dates',gi:43.4},{k:['شقراء','شقرا','shaqra'],ar:'تمر شقراء',en:'Shaqra dates',gi:42.8}];
+const OTHER_DATES=[['خلاص','khalas'],['برحي','barhi'],['عجوة','ajwa'],['صفري','safri']];
+const FOODS=[{k:['صامولي','صامولة','samoli'],ar:'صامولي',en:'Samoli roll',u:['حبة','roll'],c:30,gi:75},{k:['خبز','تميس','bread'],ar:'خبز',en:'Bread',u:['رغيف','loaf'],c:35,gi:72},{k:['كبسة','رز','أرز','مندي','kabsa','rice','mandi'],ar:'رز (كبسة/مندي)',en:'Rice (kabsa/mandi)',u:['صحن','plate'],c:65,gi:68},{k:['سمبوسة','سمبوسه','samosa'],ar:'سمبوسة',en:'Samosa',u:['حبة','piece'],c:10,gi:60},{k:['لقيمات','luqaimat'],ar:'لقيمات',en:'Luqaimat',u:['حبة','piece'],c:8,gi:70},{k:['شوربة','شوربه','soup'],ar:'شوربة شوفان',en:'Oat soup',u:['صحن','bowl'],c:20,gi:55},{k:['فول','foul','fava'],ar:'فول',en:'Foul (fava beans)',u:['صحن','plate'],c:25,gi:40},{k:['لبن','laban'],ar:'لبن',en:'Laban',u:['كاسة','glass'],c:12,gi:35},{k:['حليب','milk'],ar:'حليب',en:'Milk',u:['كوب','glass'],c:12,gi:35},{k:['عصير','juice'],ar:'عصير',en:'Juice',u:['كوب','glass'],c:26,gi:50},{k:['فيمتو','vimto'],ar:'فيمتو',en:'Vimto',u:['كاسة','glass'],c:30,gi:70},{k:['شاي','tea'],ar:'شاي بسكر',en:'Sweet tea',u:['كاسة','cup'],c:8,gi:65},{k:['هريس','harees'],ar:'هريس',en:'Harees',u:['صحن','plate'],c:40,gi:50},{k:['قهوة','فنجال','coffee'],ar:'قهوة عربية',en:'Arabic coffee',u:['فنجال','cup'],c:0,gi:0},{k:['ماء','موية','water'],ar:'ماء',en:'Water',u:['كاسة','glass'],c:0,gi:0}];
+const NUMW={'حبة':1,'حبه':1,'واحد':1,'فنجالين':2,'حبتين':2,'ثنتين':2,'اثنين':2,'كاستين':2,'صحنين':2,'ثلاث':3,'أربع':4,'اربع':4,'خمس':5,'ست':6,'سبع':7,'عشر':10,'one':1,'a ':1,'two':2,'three':3,'four':4,'five':5,'six':6};
+
+let lang='ar',theme='auto',profile='t2d',items=[],fitted=null,animate=true,ramPlan=null,ramAlt=null,lastSay='';
+const viewerTheme=document.documentElement.getAttribute('data-theme');
+try{lang=localStorage.getItem('mn-lang')||lang;theme=localStorage.getItem('mn-theme')||theme;profile=localStorage.getItem('mn-profile')||profile;if(localStorage.getItem('mn-big')==='1')document.body.classList.add('big')}catch(e){}
+if(!L[lang])lang='ar';if(!PROFILES[profile])profile='t2d';
+const $=id=>document.getElementById(id);
+const S=()=>L[lang];
+const tr=(k,v={})=>String(S()[k]).replace(/\{(\w+)\}/g,(_,x)=>v[x]);
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const num=n=>Math.round(n).toLocaleString(lang==='ar'?'ar-SA':'en-US');
+const toLatin=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const rtl=()=>lang==='ar';
+
+// ---------- model ----------
+const BODY_DL=1.6*70,AG=0.9,TMAX=40;
+const sim=(p0,meals,walks,T,ov)=>{const p=Object.assign({},p0,ov||{});const dt=0.5;let G=p.Gb,X=0,I=p.Ib,Q1=0,Q2=0,E=0;const out=[];const ms=meals.map(m=>({t:m.t,q:m.items.reduce((s,i)=>s+i.carbs*1000*(i.gi/100),0),done:false}));
+  for(let k=0;k<=T/dt;k++){const t=k*dt;for(const m of ms)if(!m.done&&t>=m.t){Q1+=m.q;m.done=true}if(k%2===0)out.push({t,g:G});
+    const w=walks.find(w=>t>=w.t&&t<w.t+w.dur);const on=w?w.k:0;E+=(on-E)/(on>E?8:30)*dt;const sg=p.SG+0.02*E;const Ra=AG*Q2/TMAX;
+    const dQ1=-Q1/TMAX,dQ2=Q1/TMAX-Q2/TMAX,dG=-(sg+X)*G+p.SG*p.Gb+Ra/BODY_DL,dX=-p.p2*X+p.p2*p.SI*(I-p.Ib),dI=-p.n*(I-p.Ib)+p.beta*Math.max(G-p.Gb,0);
+    Q1+=dQ1*dt;Q2+=dQ2*dt;G+=dG*dt;X+=dX*dt;I+=dI*dt}return out};
+const peakIn=(s,a,b)=>{let pk=null;for(const d of s)if(d.t>=a&&d.t<=b&&(!pk||d.g>pk.g))pk=d;return pk};
+const minsAbove=s=>s.filter(d=>d.g>180).length;
+
+// ---------- parsing ----------
+const nameOf=o=>lang==='ar'?o.ar:o.en;
+const localParse=text=>{const t=' '+toLatin(text).toLowerCase().replace(/[،,.+]/g,' و ')+' ';const parts=t.split(/\s+و|\sمع\s|\sand\s|\swith\s/).map(s=>s.trim()).filter(Boolean);const out=[];
+  for(const part of parts){const nm=(part.match(/\d+(\.\d+)?/)||[])[0];let q=nm?+nm:null;if(q===null)for(const [w,v] of Object.entries(NUMW))if((' '+part+' ').includes(w)){q=v;break}if(q===null)q=1;
+    const d=DATES.find(x=>x.k.some(k=>part.includes(k)));const o=OTHER_DATES.find(x=>x.some(k=>part.includes(k)));
+    if(d||o||/تمر|تمرات|تمرة|date/.test(part)){const nmS=d?nameOf(d):o?(lang==='ar'?'تمر '+o[0]:o[1][0].toUpperCase()+o[1].slice(1)+' dates'):(lang==='ar'?'تمر':'Dates');out.push({name:nmS,qty:num(q)+(lang==='ar'?' حبات':' dates'),carbs:q*7,gi:d?d.gi:55.2,source:d?'study':'avg'});continue}
+    const f=FOODS.find(x=>x.k.some(k=>part.includes(k)));if(f)out.push({name:nameOf(f),qty:num(q)+' '+f.u[lang==='ar'?0:1],carbs:q*f.c,gi:f.gi,source:'table'})}
+  return out};
+let sampleFn=null,ttsFn=null;
+const REF=()=>JSON.stringify({dates_study:DATES.map(d=>({name:nameOf(d),gi:d.gi,carbs_per_date_g:7})),other_dates_gi_avg:55.2,foods_estimates:FOODS.map(f=>({name:nameOf(f),unit:f.u[lang==='ar'?0:1],carbs_g:f.c,gi:f.gi}))});
+const askClaude=async text=>{
+  const prompt=`You are a dietitian. Parse this meal description (it may be in Saudi Arabic dialect or English) into foods and drinks with amount, available carbohydrate in grams, and glycemic index.
+Use this reference first. Date GI values come from a Saudi study (source="study"); any other date variety uses GI 55.2 with source="avg"; other reference values are table estimates (source="table"). Anything not in the reference: estimate it and use source="estimate".
+${REF()}
+Meal: """${text.slice(0,600)}"""
+Write "name" and "qty" in ${lang==='ar'?'Arabic (short, Saudi wording)':'English'}.
+Return JSON only: {"items":[{"name":"...","qty":"...","carbs":number,"gi":number,"source":"study|avg|table|estimate"}]}`;
+  let v;
+  if(typeof sampleFn.json==='function')v=await sampleFn.json(prompt,{modelTier:'quick'});
+  else{const r=await sampleFn(prompt,{modelTier:'quick'});const m=(r.text||'').match(/\{[\s\S]*\}/);v=m?JSON.parse(m[0]):null}
+  const arr=v&&Array.isArray(v.items)?v.items:[];
+  return arr.map(i=>({name:String(i.name||'').slice(0,40),qty:String(i.qty||'').slice(0,30),carbs:Math.max(0,Math.min(300,+i.carbs||0)),gi:Math.max(0,Math.min(110,+i.gi||0)),source:['study','avg','table','estimate'].includes(i.source)?i.source:'estimate'}))};
+const parse=async(text,statusEl)=>{if(sampleFn){try{const r=await askClaude(text);if(r.length)return{items:r,by:'ai'}}catch(e){if(e&&e.code==='not_granted')sampleFn=null;if(statusEl)statusEl.textContent=tr(e&&e.code==='rate_limited'?'stRate':'stLocal')}}return{items:localParse(text),by:'local'}};
+
+// ---------- chart ----------
+const drawChart=(svg,cfg)=>{const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;const T=cfg.T;
+  const all=cfg.series.flatMap(s=>s.data.map(d=>d.g)).concat((cfg.dots||[]).map(d=>d.g));
+  const mL=W<520?36:46,mR=14,mT=22,mB=32,yMin=60,yMax=Math.max(260,Math.ceil(Math.max(...all)/40)*40+20);
+  const x=t=>rtl()?W-mR-(t/T)*(W-mL-mR):mL+(t/T)*(W-mL-mR),y=g=>mT+(1-(g-yMin)/(yMax-yMin))*(H-mT-mB);
+  const xa=Math.min(x(0),x(T)),xb=Math.max(x(0),x(T));
+  const path=s=>s.map((d,i)=>(i?'L':'M')+x(d.t).toFixed(1)+' '+y(d.g).toFixed(1)).join('');
+  let g=`<rect x="${xa}" y="${y(180)}" width="${xb-xa}" height="${y(70)-y(180)}" fill="${cfg.bandFill}"/>`;
+  for(const sh of cfg.shades||[]){const a=x(sh.a),b=x(sh.b);g+=`<rect x="${Math.min(a,b)}" y="${mT}" width="${Math.abs(b-a)}" height="${H-mT-mB}" fill="${sh.fill}"/><text x="${(a+b)/2}" y="${mT+14}" text-anchor="middle">${esc(sh.label)}</text>`}
+  for(let v=yMin+20;v<=yMax;v+=W<520?80:40)g+=`<line x1="${xa}" x2="${xb}" y1="${y(v)}" y2="${y(v)}" stroke="${cfg.grid}"/><text x="${mL-6}" y="${y(v)+4}" text-anchor="end">${num(v)}</text>`;
+  for(const tk of cfg.ticks(W))g+=`<text x="${x(tk.t)}" y="${H-8}" text-anchor="middle">${esc(tk.l)}</text>`;
+  g+=`<line x1="${xa}" x2="${xb}" y1="${y(180)}" y2="${y(180)}" stroke="${cfg.limit}" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  for(const s of cfg.series)g+=`<path class="ln" d="${path(s.data)}" fill="none" stroke="${s.color}" stroke-width="${s.w||4}" stroke-linecap="round" ${s.dash?`stroke-dasharray="${s.dash}"`:''}/>`;
+  for(const d of cfg.dots||[])g+=`<circle cx="${x(d.t)}" cy="${y(d.g)}" r="6" fill="${cfg.dotFill}" stroke="${cfg.halo}" stroke-width="3"/>`;
+  if(cfg.peak){const pk=cfg.peak,top=Math.max(...cfg.series.map(s=>(s.data[Math.round(pk.t)]||pk).g));g+=`<circle cx="${x(pk.t)}" cy="${y(pk.g)}" r="6" fill="${cfg.series[0].color}" stroke="${cfg.halo}" stroke-width="3"/><text x="${x(pk.t)}" y="${Math.max(14,y(top)-12)}" text-anchor="middle" style="fill:${cfg.peakInk}">${esc(cfg.peakLabel)}</text>`}
+  svg.innerHTML=g;
+  if(animate)for(const p of svg.querySelectorAll('.ln')){if(p.getAttribute('stroke-dasharray'))continue;const len=p.getTotalLength();p.style.strokeDasharray=len;p.style.strokeDashoffset=len;p.getBoundingClientRect();p.style.transition='stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1)';p.style.strokeDashoffset=0}};
+
+// count-up stat cards
+const counters=new WeakMap();
+const statsHTML=cards=>cards.map((c,i)=>`<div class="stat"><span>${esc(c.l)}</span><b class="${c.cls||''}" data-v="${c.v}" data-suf="${esc(c.suf||'')}" data-pre="${esc(c.pre||'')}">${esc((c.pre||'')+num(c.v)+(c.suf||''))}</b><small>${esc(c.sub)}</small></div>`).join('');
+const countUp=root=>{if(!animate)return;for(const b of root.querySelectorAll('b[data-v]')){const to=+b.dataset.v,from=counters.get(b)||0,t0=performance.now();const step=now=>{const k=Math.min(1,(now-t0)/700),e=1-(1-k)**3;b.textContent=b.dataset.pre+num(from+(to-from)*e)+b.dataset.suf;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step);counters.set(b,to)}};
+const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
+
+// ---------- main meal ----------
+const READ_T=[0,30,60,120,180],EXAMPLE={0:146,30:203,60:268,120:274,180:208};
+const readings=()=>READ_T.map(t=>({t,g:+$('r'+t).value})).filter(r=>r.g>=40&&r.g<=500);
+const whatIf=()=>items.map(it=>({...it,carbs:it.carbs*($('wHalf').checked?0.5:1),gi:$('wSwap').checked&&(it.source==='study'||it.source==='avg'||/تمر|date/i.test(it.name))?43.4:it.gi}));
+const drawMain=()=>{const p=PROFILES[profile];const A=sim(p,[{t:0,items}],[],240),B=sim(p,[{t:0,items:whatIf()}],$('wWalk').checked?[{t:15,dur:15,k:1}]:[],240);
+  const M=fitted?sim({...p,Gb:fitted.Gb},[{t:0,items}],[],240,{SI:p.SI*fitted.m1,beta:p.beta*fitted.m2}):null;
+  const series=[{data:A,color:'var(--date)'},{data:B,color:'var(--b)',dash:'8 5',w:3}];if(M)series.push({data:M,color:'var(--me)'});
+  const pk=peakIn(A,0,240);
+  drawChart($('chart'),{T:240,series,dots:fitted?readings():[],peak:pk,peakLabel:tr('peakL',{v:num(pk.g)}),bandFill:'color-mix(in srgb,var(--date) 8%,transparent)',grid:'var(--line)',limit:'var(--hi)',dotFill:'var(--ink)',halo:'var(--sand)',peakInk:'var(--ink)',
+    ticks:W=>[0,60,120,180,240].filter((t,i)=>W>=520||i%2===0).map(t=>({t,l:t?tr('hr',{h:num(t/60)}):S().eat}))});
+  const pB=peakIn(B,0,240),carbs=items.reduce((s,i)=>s+i.carbs,0),above=minsAbove(A);
+  const cards=[{l:S().stPeak,v:pk.g,sub:tr('stPeakS',{m:num(pk.t),c:num(carbs)}),cls:pk.g>180?'hi':''},{l:S().stAbove,v:above,suf:' '+S().min,sub:tr('stAboveS',{v:num(A[120].g)}),cls:above?'hi':'ok'},{l:S().stAlt,v:pB.g,sub:tr('stAltS',{d:num(Math.max(0,pk.g-pB.g))}),cls:pB.g>180?'hi':'ok'}];
+  if(M){const pM=peakIn(M,0,240);cards.push({l:S().stMe,v:pM.g,sub:S().stMeS,cls:pM.g>180?'hi':''})}
+  $('figs').innerHTML=statsHTML(cards);countUp($('figs'));
+  lastSay=S().say({peak:Math.round(pk.g),at:Math.round(pk.t),above,alt:Math.round(pB.g)})};
+const renderItems=()=>{$('items').innerHTML=items.length?items.map((it,i)=>`<tr><td>${esc(it.name)}<div class="msub">${esc(it.qty)} · <span class="tag ${it.source==='study'||it.source==='avg'?'s':''}">${esc(S().src[it.source])}</span></div></td><td>${esc(it.qty)}</td><td class="n"><input type="number" min="0" max="300" data-i="${i}" data-f="carbs" value="${Math.round(it.carbs)}" aria-label="${esc(S().thCarb+' '+it.name)}"></td><td class="n"><input type="number" min="0" max="110" data-i="${i}" data-f="gi" value="${+(+it.gi).toFixed(1)}" aria-label="${esc(S().thGi+' '+it.name)}"></td><td><span class="tag ${it.source==='study'||it.source==='avg'?'s':''}">${esc(S().src[it.source])}</span></td></tr>`).join(''):`<tr><td colspan="5" class="note">${esc(S().noItems)}</td></tr>`};
+$('items').addEventListener('input',e=>{const el=e.target;if(!el.dataset.f)return;items[+el.dataset.i][el.dataset.f]=Math.max(0,+el.value||0);fitted=null;$('fitOut').innerHTML='';animate=false;drawMain();animate=true});
+for(const id of['wHalf','wWalk','wSwap'])$(id).addEventListener('change',drawMain);
+let parsedBy='ex';
+const run=async()=>{const text=$('mealTxt').value.trim();if(!text){$('status').textContent=S().stEmpty;return}
+  fitted=null;$('fitOut').innerHTML='';$('go').disabled=true;$('status').textContent=S().stReading;
+  const r=await parse(text,$('status'));items=r.items;parsedBy=r.by;$('go').disabled=false;if(r.by==='ai'||!sampleFn)$('status').textContent=S().stDone;
+  $('parsedBy').textContent=r.by==='ai'?S().byAI:S().byLocal;renderItems();drawMain();$('fitNote').textContent=S().calEx};
+$('go').addEventListener('click',run);
+const fit=()=>{const p=PROFILES[profile],R=readings();if(R.length<2){$('fitNote').textContent=S().calNeed;return}
+  const r0=R.find(r=>r.t===0),Gb=r0?r0.g:p.Gb,mae=s=>R.reduce((a,r)=>a+Math.abs(s[r.t].g-r.g),0)/R.length;
+  const base=mae(sim(p,[{t:0,items}],[],240));let best={e:Infinity};
+  for(let i=0;i<21;i++)for(let j=0;j<21;j++){const m1=0.25*16**(i/20),m2=0.25*16**(j/20);const e=mae(sim({...p,Gb},[{t:0,items}],[],240,{SI:p.SI*m1,beta:p.beta*m2}));if(e<best.e)best={e,m1,m2}}
+  fitted={Gb,m1:best.m1,m2:best.m2,base,e:best.e,n:R.length};showFit();drawMain()};
+const showFit=()=>{if(!fitted){$('fitOut').innerHTML='';return}const f=fitted;$('fitOut').innerHTML=statsHTML([{l:S().fBefore,v:f.base,sub:S().fUnit},{l:S().fAfter,v:f.e,sub:S().fUnit,cls:'ok'},{l:S().fGain,v:f.base>0?(1-f.e/f.base)*100:0,suf:lang==='ar'?'٪':'%',sub:tr('fOn',{n:num(f.n)}),cls:'ok'}]);countUp($('fitOut'));$('fitNote').textContent=S().calDone};
+$('fit').addEventListener('click',fit);
+
+// ---------- Ramadan ----------
+const START=16*60;
+const toMin=v=>{const [h,m]=v.split(':').map(Number);let t=h*60+m-START;if(t<0)t+=1440;return t};
+const clock=t=>{const m=(t+START)%1440,h=Math.floor(m/60),mm=m%60;return(lang==='ar'?num(h)+':'+(mm<10?'٠':'')+num(mm):String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0'))};
+let ram={ift:[],main:[],suh:[]};
+const drawRam=()=>{const p=PROFILES[profile];const tI=toMin($('tIft').value||'18:00'),tS=toMin($('tSuh').value||'04:00');
+  const plan=sim(p,[{t:tI,items:[...ram.ift,...ram.main]},{t:tS,items:ram.suh}],[],1440);
+  const alt=sim(p,[{t:tI,items:ram.ift},{t:$('rSplit').checked?tI+40:tI,items:ram.main},{t:tS,items:ram.suh}],$('rWalk').checked?[{t:tI+120,dur:40,k:0.6}]:[],1440);
+  const pk=peakIn(plan,tI,tS),pk2=peakIn(alt,tI,tS),pS=peakIn(plan,tS,Math.min(1440,tS+300));
+  drawChart($('ramChart'),{T:1440,series:[{data:plan,color:'#e0a26c'},{data:alt,color:'#93b8d6',dash:'8 5',w:3}],peak:pk,peakLabel:tr('peakL',{v:num(pk.g)}),
+    shades:[{a:Math.min(1440,tS+60),b:1440,fill:'rgba(232,180,90,.08)',label:S().fast}],bandFill:'rgba(255,255,255,.05)',grid:'#2a3360',limit:'#ff7d8e',dotFill:'#fff',halo:'#121a3a',peakInk:'#f4efe4',
+    ticks:W=>[0,240,480,720,960,1200,1440].filter((t,i)=>W>=620||i%2===0).map(t=>({t,l:clock(t)}))});
+  $('ramFigs').innerHTML=statsHTML([{l:S().rmPeak,v:pk.g,sub:tr('rmPeakS',{h:clock(pk.t)}),cls:pk.g>180?'hi':''},{l:S().rmPeak2,v:pk2.g,sub:tr('rmPeak2S',{d:num(Math.max(0,pk.g-pk2.g))})},{l:S().rmAbove,v:minsAbove(plan),suf:' '+S().min,sub:S().rmAboveS},{l:S().rmSuh,v:pS.g,sub:tr('rmPeakS',{h:clock(pS.t)})}]);
+  for(const b of $('ramFigs').querySelectorAll('b.hi'))b.style.color='#ff7d8e';countUp($('ramFigs'))};
+$('ramGo').addEventListener('click',async()=>{$('ramGo').disabled=true;$('ramStatus').textContent=S().stReading;
+  for(const [k,id] of [['ift','rIft'],['main','rMain'],['suh','rSuh']]){const r=await parse($(id).value.trim()||'-',$('ramStatus'));ram[k]=r.items}
+  $('ramGo').disabled=false;$('ramStatus').textContent=S().stDone;drawRam()});
+for(const id of['rSplit','rWalk','tIft','tSuh'])$(id).addEventListener('change',drawRam);
+
+// ---------- sky ----------
+const drawSky=()=>{const s=$('sky'),W=s.clientWidth||1200;let seed=7,g='';const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+  for(let i=0;i<Math.round(W/16);i++){const x=rnd()*W,y=6+rnd()*80,r=rnd()*1.4+.4;g+=`<circle class="${i%3?'':'tw'}" style="animation-delay:${(rnd()*3).toFixed(2)}s" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(2)}" fill="#fff" opacity="${(.4+rnd()*.6).toFixed(2)}"/>`}
+  const cx=rtl()?Math.max(48,W*.06):W-Math.max(48,W*.06);g+=`<mask id="cres"><rect width="${W}" height="92" fill="#fff"/><circle cx="${cx+(rtl()?10:-10)}" cy="40" r="22" fill="#000"/></mask><circle cx="${cx}" cy="46" r="24" fill="#e8b45a" mask="url(#cres)"/>`;
+  s.innerHTML=g};
+
+// ---------- language, theme, font ----------
+const applyLang=()=>{const s=S();document.documentElement.lang=lang;document.documentElement.dir=s.dir;document.title=lang==='ar'?'منحنى التمر':'Manhana';
+  for(const el of document.querySelectorAll('[data-t]')){const v=s[el.dataset.t];if(typeof v==='string')el.textContent=v}
+  for(const el of document.querySelectorAll('[data-ta]'))el.setAttribute('aria-label',s[el.dataset.ta]);
+  $('bLang').textContent=lang==='ar'?'EN':'ع';$('bLang').setAttribute('aria-label',lang==='ar'?'English':'العربية');
+  $('profiles').innerHTML=Object.keys(PROFILES).map(k=>`<button type="button" data-p="${k}" aria-pressed="${k===profile}">${esc(s.pf[k])}</button>`).join('');
+  $('readings').innerHTML=READ_T.map(t=>`<div><label for="r${t}">${esc(t?tr('rdT',{m:num(t)}):s.rd0)}</label><input id="r${t}" type="number" inputmode="numeric" min="40" max="500" value="${EXAMPLE[t]}"></div>`).join('');
+  $('gi').innerHTML=DATES.map(d=>`<tr><td>${esc(nameOf(d))}</td><td style="width:45%"><div style="height:10px;border-radius:5px;background:var(--date);width:${(d.gi/74.6*100).toFixed(1)}%"></div></td><td class="n">${d.gi.toLocaleString(lang==='ar'?'ar-SA':'en-US',{maximumFractionDigits:1})}</td></tr>`).join('');
+  $('mealTxt').value=s.ex.meal;$('rIft').value=s.ex.ift;$('rMain').value=s.ex.main;$('rSuh').value=s.ex.suh;
+  items=localParse(s.ex.meal);ram={ift:localParse(s.ex.ift),main:localParse(s.ex.main),suh:localParse(s.ex.suh)};fitted=null;
+  $('parsedBy').textContent=s.byEx;$('status').textContent='';$('ramStatus').textContent='';$('fitNote').textContent=s.calEx;
+  applyTheme();renderItems();drawSky();drawMain();fit();drawRam()};
+const applyTheme=()=>{const r=document.documentElement;if(theme==='auto'){if(viewerTheme)r.setAttribute('data-theme',viewerTheme);else r.removeAttribute('data-theme')}else r.setAttribute('data-theme',theme);
+  const ic={auto:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',light:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.6 3.6l1.4 1.4M15 15l1.4 1.4M3.6 16.4 5 15M15 5l1.4-1.4"/></g></svg>',dark:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M15 13.5A7 7 0 0 1 7 3a7 7 0 1 0 8 10.5z" fill="currentColor"/></svg>'};
+  $('bTheme').innerHTML=ic[theme]+'<span style="margin-inline-start:6px">'+esc(S().theme[theme])+'</span>'};
+$('bLang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('mn-lang',lang)}catch(e){}applyLang()});
+$('bTheme').addEventListener('click',()=>{theme={auto:'light',light:'dark',dark:'auto'}[theme];try{localStorage.setItem('mn-theme',theme)}catch(e){}applyTheme();animate=false;drawMain();animate=true});
+$('bFont').addEventListener('click',()=>{const on=document.body.classList.toggle('big');$('bFont').setAttribute('aria-pressed',on);$('bFont').textContent=on?'أ−':'أ+';try{localStorage.setItem('mn-big',on?'1':'0')}catch(e){}});
+$('profiles').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;profile=b.dataset.p;try{localStorage.setItem('mn-profile',profile)}catch(err){}for(const x of $('profiles').children)x.setAttribute('aria-pressed',x.dataset.p===profile);fitted=null;showFit();$('fitNote').textContent=S().calEx;drawMain();drawRam()});
+if(document.body.classList.contains('big')){$('bFont').setAttribute('aria-pressed','true');$('bFont').textContent='أ−'}
+
+const roM=new ResizeObserver(()=>{animate=false;drawMain();animate=true});roM.observe($('chart'));
+const roR=new ResizeObserver(()=>{animate=false;drawRam();drawSky();animate=true});roR.observe($('ramChart'));
+applyLang();
+
+// ---------- capabilities: AI, voice in, voice out ----------
+const boot=async()=>{if(!window.claude||!window.claude.use)return;
+  try{sampleFn=await window.claude.use('sample')}catch(e){sampleFn=null}
+  let d=null;try{d=await window.claude.use('dictation')}catch(e){d=null}
+  if(d){const mic=$('mic');mic.hidden=false;let on=false;
+    d.onPartial(({text})=>{$('status').textContent='… '+text});
+    d.onFinal(({text})=>{const m=$('mealTxt');m.value=(m.value?m.value+' ':'')+text;$('status').textContent=''});
+    d.onState(({state})=>{on=state==='listening';mic.classList.toggle('on',on);mic.textContent=on?S().micStop:S().mic;if(!on&&$('mealTxt').value.trim())run()});
+    mic.addEventListener('click',()=>{if(on){d.stop().catch(()=>{});return}$('mealTxt').value='';d.start().catch(e=>{$('status').textContent=e&&e.code==='not_granted'?S().micNo:S().micErr})})}
+  try{ttsFn=await window.claude.use('tts')}catch(e){ttsFn=null}
+  if(ttsFn){const b=$('listen');b.hidden=false;let speaking=false;
+    ttsFn.onState(({state})=>{speaking=state==='speaking';b.textContent=speaking?S().listenStop:S().listen});
+    b.addEventListener('click',()=>{if(speaking){ttsFn.stop();return}ttsFn.speak(lastSay,lang==='en'?{language:'en'}:{}).catch(e=>{if(e&&e.code==='not_granted')b.hidden=true})})}};
+boot();
+}
+</script>
+</body>
+</html>
