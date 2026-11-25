@@ -167,6 +167,8 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chips button{min-height:40px;padding:0 14px;border-radius:20px;font-weight:400;font-size:15px;background:var(--card)}
 .chips button:hover{border-color:var(--date)}
+.wt{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px 0 12px;border:1px solid var(--line);border-radius:24px;background:var(--card);font-weight:600}
+.wt input{width:4.2em;min-height:36px;padding:2px 8px;text-align:center;border-radius:12px}
 @media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.meals{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px){.links a{padding:8px 10px}.dots{display:none}.cols,.gloss{grid-template-columns:minmax(0,1fr)}.ask{grid-template-columns:minmax(0,1fr) auto}.ask textarea{grid-column:1/-1}.links{order:3;width:100%;justify-content:space-between}}
 @media(max-width:600px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:12px}.stat b{font-size:26px}.it th:nth-child(2),.it td:nth-child(2),.it th:nth-child(5),.it td:nth-child(5){display:none}.msub{display:block}}
@@ -217,6 +219,7 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
     <div class="status" id="status" role="status"></div>
     <div class="row">
       <div class="seg" role="group" id="profiles"></div>
+      <label class="wt" for="wt"><span data-t="wtL">وزنك</span> <input id="wt" type="number" inputmode="numeric" min="30" max="200" step="1" value="70"> <span data-t="kg">كغ</span></label>
       <button type="button" id="listen" hidden data-t="listen">اسمع النتيجة</button>
     </div>
     <div class="fig" role="img" data-ta="chartAria" aria-label="منحنى السكر"><svg id="chart"></svg></div>
@@ -347,11 +350,12 @@ sgH:'وش آكل بداله؟ ونصايح لك',sgLead:'نقترح لك تغي�
 kSwap:'بديل',kPortion:'كمية',kWalk:'حركة',kCombo:'مجموعة',
 loc:{swapDates:'بدّل التمر بسكري',swapDatesW:'التمر السكري مؤشره ٤٣٫٤ من أقل الأصناف.',half:'نص {f}',halfW:'{f} هو أكثر شي فيه نشويات في وجبتك.',walk:'امش نص ساعة بعد الأكل',walkW:'المشي يساعد العضلات تسحب السكر من الدم.',brown:'رز بني بدل الأبيض',brownW:'الرز البني أبطأ في رفع السكر (قيمة تقديرية).',combo:'نص {f} مع مشي ربع ساعة',comboW:'تغييرين صغار مع بعض يفرقون أكثر.',fewer:'قلّل التمر لحبتين',fewerW:'الكمية تفرق أكثر من الصنف.'},
 chipsL:['صحن كبسة دجاج وكاسة لبن','شاورما وبيبسي','قطعة كيكة وشاي','٣ تمرات سكري وقهوة'],
+wtL:'وزنك',kg:'كغ',
 ramH:'يومك في رمضان',ramLead:'حط فطورك وسحورك، ونرسم سكرك من العصر لين عصر اليوم اللي بعده. وشوف وش يصير لو قسّمت فطورك ومشيت في التراويح.',rIft:'الفطور (أول ما تفطر)',rMain:'الأكل بعد الصلاة',rMainN:'إذا ما قسّمت، نحسبه مع الفطور على طول.',rSuh:'السحور',rTime:'الوقت',ramGo:'ارسم يومي',rSplit:'أقسّم: تمر وماء، وبعد الصلاة الأكل',rWalk:'أمشي في التراويح ٤٠ دقيقة',fast:'صيام',
 rmPeak:'أعلى بعد الفطور',rmPeakS:'الساعة {h}',rmPeak2:'لو قسّمت',rmPeak2S:'أقل بـ {d}',rmAbove:'وقت فوق ١٨٠',rmAboveS:'في اليوم كله',rmSuh:'أعلى بعد السحور',
 ramWarn:'الهبوط وقت الصيام يجي غالبًا من بعض أدوية السكر والإنسولين، ونموذجنا ما يحسب الأدوية. قبل رمضان قيّم خطر صيامك مع طبيبك بـ',ramLink:'حاسبة IDF-DAR',
 giH:'التمور: وش يرفع أكثر؟',giN1:'٢١ صنف بقيم منشورة. الأساس',giSrc:'دراسة جامعة القصيم على ١٧ صنفًا (٢٠١٦)',giN2:'الدراسة ما لقت فرق مهم في المؤشر بين الأصناف، لكن الحمل السكري فرق بوضوح. يعني الكمية أهم من الصنف. وكملناها بدراسات من الإمارات للخلاص والبرحي وغيرهم. والأصناف اللي ما لها دراسة منشورة، مثل الجالكسي، نستخدم لها المتوسط ٥٥٫٢ ونكتب هذا عندها.',
-mH:'كيف نحسبها',m1:'نموذج يتبع الأكل من المعدة للدم (حجرتين)، مع نموذج Bergman المصغّر للسكر والإنسولين. ضبطنا الملفات بحيث قراءة الساعتين بعد ٧٥ غ جلوكوز تطلع في حدودها الطبية: تحت ١٤٠ للسليم، ١٤٠–١٩٩ لبداية السكر، و٢٠٠ فوق للسكري.',m2:'المعايرة تجرّب ٤٤١ تركيبة وتختار الأقرب لقراءاتك. قراءات وجبة وحدة تضبط شكل منحناك، لكنها ما تكفي تفصل بين حساسية الإنسولين وإفرازه، فما نعرضها كأرقام طبية. قيم التمر من دراسة سعودية، وباقي الأكل تقديرية ومعلّمة.',
+mH:'كيف نحسبها',m1:'نموذج يتبع الأكل من المعدة للدم (حجرتين)، مع نموذج Bergman المصغّر للسكر والإنسولين. الوزن يغيّر حجم الدم اللي ينتشر فيه السكر: نفس الوجبة ترفع السكر عند الشخص الأخف أكثر. ضبطنا الملفات على ٧٠ كغ بحيث قراءة الساعتين بعد ٧٥ غ جلوكوز تطلع في حدودها الطبية: تحت ١٤٠ للسليم، ١٤٠–١٩٩ لبداية السكر، و٢٠٠ فوق للسكري.',m2:'المعايرة تجرّب ٤٤١ تركيبة وتختار الأقرب لقراءاتك. قراءات وجبة وحدة تضبط شكل منحناك، لكنها ما تكفي تفصل بين حساسية الإنسولين وإفرازه، فما نعرضها كأرقام طبية. قيم التمر من دراسة سعودية، وباقي الأكل تقديرية ومعلّمة.',
 disc:'أداة تعليمية تقريبية، ما تعطي جرعات دواء ولا إنسولين. أي قرار علاجي، خصوصًا الصيام، يكون مع طبيبك.',
 theme:{auto:'تلقائي',light:'فاتح',dark:'داكن'},
 say:(o)=>`أعلى سكر بيوصل له تقريبًا ${o.peak}، بعد ${o.at} دقيقة من الأكل. ${o.above>0?`وبيقعد فوق المية وثمانين حوالي ${o.above} دقيقة.`:'وما بيتعدى المية وثمانين.'} ولو غيّرت مثل ما اخترت، أعلى رقم بينزل لـ ${o.alt}.`,
@@ -371,11 +375,12 @@ sgH:'What could I eat instead? Tips for you',sgLead:'Small changes to your meal:
 kSwap:'Swap',kPortion:'Portion',kWalk:'Activity',kCombo:'Combo',
 loc:{swapDates:'Swap the dates for Sukkari',swapDatesW:'Sukkari has a GI of 43.4, among the lowest.',half:'Half the {f}',halfW:'{f} carries the most carbs in your meal.',walk:'Walk 30 minutes after eating',walkW:'Walking helps muscles pull sugar out of the blood.',brown:'Brown rice instead of white',brownW:'Brown rice raises sugar more slowly (estimated value).',combo:'Half the {f} plus a 15-minute walk',comboW:'Two small changes together make more difference.',fewer:'Cut the dates to two',fewerW:'The amount matters more than the variety.'},
 chipsL:['a plate of chicken kabsa and a glass of laban','shawarma and a pepsi','a slice of cake and tea','3 sukkari dates and coffee'],
+wtL:'Your weight',kg:'kg',
 ramH:'Your day in Ramadan',ramLead:'Enter your iftar and suhoor and we draw your sugar from one afternoon to the next. See what happens if you split iftar and walk during taraweeh.',rIft:'Iftar (when you break the fast)',rMain:'Main meal after prayer',rMainN:'If you do not split, we count it with iftar.',rSuh:'Suhoor',rTime:'Time',ramGo:'Draw my day',rSplit:'Split: dates and water, then the meal after prayer',rWalk:'Walk 40 minutes during taraweeh',fast:'Fasting',
 rmPeak:'Highest after iftar',rmPeakS:'at {h}',rmPeak2:'If you split',rmPeak2S:'{d} lower',rmAbove:'Time above 180',rmAboveS:'across the day',rmSuh:'Highest after suhoor',
 ramWarn:'Lows during fasting mostly come from some diabetes medicines and insulin, and our model does not include medicines. Before Ramadan, assess your fasting risk with your doctor using the',ramLink:'IDF-DAR calculator',
 giH:'Dates: which raise sugar most?',giN1:'21 varieties with published values, mainly the',giSrc:'Qassim University study of 17 varieties (2016)',giN2:'The study found no significant GI difference between varieties, but glycemic load differed clearly: the amount matters more than the variety. UAE studies add Khalas, Barhi and others. Varieties with no published study, such as Galaxy, use the 55.2 average and are marked.',
-mH:'How we calculate',m1:'A two-compartment gut model with the Bergman minimal model of glucose and insulin. Profiles are tuned so the 2-hour value after 75 g glucose falls in its clinical range: under 140 healthy, 140–199 prediabetes, 200+ diabetes.',m2:'Calibration tries 441 combinations and keeps the closest to your readings. One meal of readings fixes the shape of your curve but cannot separate insulin sensitivity from secretion, so we do not show them as medical numbers. Date values come from a Saudi study; other foods are estimates and marked as such.',
+mH:'How we calculate',m1:'A two-compartment gut model with the Bergman minimal model of glucose and insulin. Weight sets the blood volume the sugar spreads into: the same meal raises sugar more in a lighter person. Profiles are tuned at 70 kg so the 2-hour value after 75 g glucose falls in its clinical range: under 140 healthy, 140–199 prediabetes, 200+ diabetes.',m2:'Calibration tries 441 combinations and keeps the closest to your readings. One meal of readings fixes the shape of your curve but cannot separate insulin sensitivity from secretion, so we do not show them as medical numbers. Date values come from a Saudi study; other foods are estimates and marked as such.',
 disc:'An educational approximation. It gives no medicine or insulin doses. Any treatment decision, especially fasting, belongs with your doctor.',
 theme:{auto:'Auto',light:'Light',dark:'Dark'},
 say:(o)=>`Your blood sugar should peak at about ${o.peak}, ${o.at} minutes after eating. ${o.above>0?`It stays above 180 for about ${o.above} minutes.`:'It stays under 180.'} With the changes you chose, the peak drops to ${o.alt}.`,
@@ -405,11 +410,12 @@ const toLatin=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 const rtl=()=>lang==='ar';
 
 // ---------- model ----------
-const BODY_DL=1.6*70,AG=0.9,TMAX=40;
+let weight=70;try{const w=+localStorage.getItem('mn-wt');if(w>=30&&w<=200)weight=w}catch(e){}
+const AG=0.9,TMAX=40;
 const sim=(p0,meals,walks,T,ov)=>{const p=Object.assign({},p0,ov||{});const dt=0.5;let G=p.Gb,X=0,I=p.Ib,Q1=0,Q2=0,E=0;const out=[];const ms=meals.map(m=>({t:m.t,q:m.items.reduce((s,i)=>s+i.carbs*1000*(i.gi/100),0),done:false}));
   for(let k=0;k<=T/dt;k++){const t=k*dt;for(const m of ms)if(!m.done&&t>=m.t){Q1+=m.q;m.done=true}if(k%2===0)out.push({t,g:G});
     const w=walks.find(w=>t>=w.t&&t<w.t+w.dur);const on=w?w.k:0;E+=(on-E)/(on>E?8:30)*dt;const sg=p.SG+0.01*E;const Ra=AG*Q2/TMAX;
-    const dQ1=-Q1/TMAX,dQ2=Q1/TMAX-Q2/TMAX,dG=-(sg+X)*G+p.SG*p.Gb+Ra/BODY_DL,dX=-p.p2*X+p.p2*p.SI*(I-p.Ib),dI=-p.n*(I-p.Ib)+p.beta*Math.max(G-p.Gb,0);
+    const dQ1=-Q1/TMAX,dQ2=Q1/TMAX-Q2/TMAX,dG=-(sg+X)*G+p.SG*p.Gb+Ra/(1.6*weight),dX=-p.p2*X+p.p2*p.SI*(I-p.Ib),dI=-p.n*(I-p.Ib)+p.beta*Math.max(G-p.Gb,0);
     Q1+=dQ1*dt;Q2+=dQ2*dt;G+=dG*dt;X+=dX*dt;I+=dI*dt}return out};
 const peakIn=(s,a,b)=>{let pk=null;for(const d of s)if(d.t>=a&&d.t<=b&&(!pk||d.g>pk.g))pk=d;return pk};
 const minsAbove=s=>s.filter(d=>d.g>180).length;
@@ -604,6 +610,8 @@ const applyTheme=()=>{const r=document.documentElement;if(theme==='auto'){if(vie
 $('bLang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('mn-lang',lang)}catch(e){}applyLang()});
 $('bTheme').addEventListener('click',()=>{theme={auto:'light',light:'dark',dark:'auto'}[theme];try{localStorage.setItem('mn-theme',theme)}catch(e){}applyTheme();animate=false;withMode('static',()=>{drawMain();drawRam()});animate=true});
 $('bFont').addEventListener('click',()=>{const on=document.body.classList.toggle('big');$('bFont').setAttribute('aria-pressed',on);$('bFont').textContent=on?'أ−':'أ+';try{localStorage.setItem('mn-big',on?'1':'0')}catch(e){}});
+$('wt').value=weight;
+$('wt').addEventListener('change',()=>{const w=Math.round(+$('wt').value);if(!(w>=30&&w<=200)){$('wt').value=weight;return}weight=w;try{localStorage.setItem('mn-wt',w)}catch(e){}fitted=null;showFit();$('fitNote').textContent=S().calEx;altOverride=null;sugs=localSugs();renderSugs();drawMain();drawRam()});
 $('profiles').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;profile=b.dataset.p;try{localStorage.setItem('mn-profile',profile)}catch(err){}for(const x of $('profiles').children)x.setAttribute('aria-pressed',x.dataset.p===profile);fitted=null;showFit();$('fitNote').textContent=S().calEx;drawMain();drawRam()});
 if(document.body.classList.contains('big')){$('bFont').setAttribute('aria-pressed','true');$('bFont').textContent='أ−'}
 
