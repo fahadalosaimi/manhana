@@ -17,6 +17,7 @@
    LAYOUT laptop: woven nav, title + meal box, full-width chart, stat row; steps; items | calibration; Ramadan night band; phone: stacked in that order */
 :root{color-scheme:light dark;--bg:light-dark(#fffdf9,#120d0a);--ink:light-dark(#1d140e,#f5ede4);--mute:light-dark(#6a5a4d,#bfae9c);--date:light-dark(#5a2d13,#e3a56b);--date2:light-dark(#8f4f26,#b97842);--sand:light-dark(#f6ecdd,#1f1712);--card:light-dark(#ffffff,#1a130f);--line:light-dark(#e6d7c3,#3a2c21);--hi:light-dark(#c8243a,#ff6b7d);--b:light-dark(#3d5a73,#93b8d6);--me:light-dark(#137a68,#5fd6be);--onDate:light-dark(#fffdf9,#120d0a);--gold:light-dark(#d9992a,#ecb95c)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+html:root[data-mn-theme=light]{color-scheme:light}html:root[data-mn-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
 html{scroll-padding-top:var(--navh,80px);scroll-behavior:smooth}
@@ -617,11 +618,11 @@ const applyLang=()=>{const s=S();document.documentElement.lang=lang;document.doc
   items=localParse(s.ex.meal);ram={ift:localParse(s.ex.ift),main:localParse(s.ex.main),suh:localParse(s.ex.suh)};fitted=null;
   $('parsedBy').textContent=s.byEx;$('status').textContent='';$('ramStatus').textContent='';$('fitNote').textContent=s.calEx;
   applyTheme();renderItems();drawSky();altOverride=null;sugs=localSugs();drawMain();fit();drawRam();renderSugs();$('sgStatus').textContent=''};
-const applyTheme=()=>{const r=document.documentElement;if(theme==='auto'){if(viewerTheme)r.setAttribute('data-theme',viewerTheme);else r.removeAttribute('data-theme')}else r.setAttribute('data-theme',theme);
+const applyTheme=()=>{const r=document.documentElement;if(theme==='auto')r.removeAttribute('data-mn-theme');else r.setAttribute('data-mn-theme',theme);
   const ic={auto:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',light:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.6 3.6l1.4 1.4M15 15l1.4 1.4M3.6 16.4 5 15M15 5l1.4-1.4"/></g></svg>',dark:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M15 13.5A7 7 0 0 1 7 3a7 7 0 1 0 8 10.5z" fill="currentColor"/></svg>'};
   $('bTheme').innerHTML=ic[theme]+'<span style="margin-inline-start:6px">'+esc(S().theme[theme])+'</span>'};
 $('bLang').addEventListener('click',()=>{lang=lang==='ar'?'en':'ar';try{localStorage.setItem('mn-lang',lang)}catch(e){}applyLang()});
-$('bTheme').addEventListener('click',()=>{theme={auto:'light',light:'dark',dark:'auto'}[theme];try{localStorage.setItem('mn-theme',theme)}catch(e){}applyTheme();animate=false;withMode('static',()=>{drawMain();drawRam()});animate=true});
+$('bTheme').addEventListener('click',()=>{{const m=getComputedStyle(document.body).backgroundColor.match(/\d+/g)||[255,255,255];theme=(+m[0]+ +m[1]+ +m[2])<300?'light':'dark'};try{localStorage.setItem('mn-theme',theme)}catch(e){}applyTheme();animate=false;withMode('static',()=>{drawMain();drawRam()});animate=true});
 $('bFont').addEventListener('click',()=>{const on=document.body.classList.toggle('big');$('bFont').setAttribute('aria-pressed',on);$('bFont').textContent=on?'أ−':'أ+';try{localStorage.setItem('mn-big',on?'1':'0')}catch(e){}});
 $('wt').value=weight;
 $('wt').addEventListener('change',()=>{const w=Math.round(+$('wt').value);if(!(w>=30&&w<=200)){$('wt').value=weight;return}weight=w;try{localStorage.setItem('mn-wt',w)}catch(e){}fitted=null;showFit();$('fitNote').textContent=S().calEx;altOverride=null;sugs=localSugs();renderSugs();drawMain();drawRam()});
