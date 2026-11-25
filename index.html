@@ -152,6 +152,18 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
 .tip b{font-family:"Readex Pro";display:block}
 .tip i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:6px}
 .night .tip{background:#151d42;border-color:#2a3360;color:#f4efe4}
+.sugs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:16px;margin-top:18px}
+.sug{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.sug.best{border-color:var(--gold);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 35%,transparent)}
+.sug .badge{position:absolute;inset-inline-end:12px;top:12px;font-size:13px;font-weight:600;background:var(--gold);color:#1d140e;padding:2px 10px;border-radius:10px}
+.sug h3{margin:0;padding-inline-start:0}
+.sug .kind{font-size:13px;color:var(--mute)}
+.sug svg{width:100%;height:76px;display:block}
+.sug .delta{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sug .delta b{font:700 30px/1 "Readex Pro";color:var(--me);white-space:nowrap}
+.sug .delta span{font-size:14px;color:var(--mute)}
+.sug button{margin-top:auto}
+.sug.on{outline:3px solid var(--b);outline-offset:2px}
 @media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.meals{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px){.links a{padding:8px 10px}.dots{display:none}.cols,.gloss{grid-template-columns:minmax(0,1fr)}.ask{grid-template-columns:minmax(0,1fr) auto}.ask textarea{grid-column:1/-1}.links{order:3;width:100%;justify-content:space-between}}
 @media(max-width:600px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:12px}.stat b{font-size:26px}.it th:nth-child(2),.it td:nth-child(2),.it th:nth-child(5),.it td:nth-child(5){display:none}.msub{display:block}}
@@ -258,6 +270,17 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
   </div>
 </section>
 
+<section class="band page" id="swap">
+  <div class="wrap">
+    <h2 data-t="sgH">وش آكل بداله؟</h2>
+    <p class="lead" data-t="sgLead"></p>
+    <div class="row"><button type="button" class="go" id="sgGo" data-t="sgGo">اقترح علي</button><span class="status" id="sgStatus" role="status" style="margin:0"></span></div>
+    <div class="sugs" id="sugs"></div>
+    <p class="note" data-t="sgNote"></p>
+  </div>
+</section>
+<svg class="sadu" aria-hidden="true"><rect class="drift" width="200%" height="26" fill="url(#sadu)"/></svg>
+
 <section class="band night page" id="ramadan">
   <svg class="sky" id="sky" aria-hidden="true"></svg>
   <div class="wrap">
@@ -305,7 +328,7 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
 <script>
 {
 const L={
-ar:{dir:'rtl',brand:'منحنى',navMeal:'وجبتك',navHow:'كيف يشتغل',navRam:'رمضان',dotTune:'التفاصيل',dotDates:'التمور',tipAfter:'بعد {m} د',h1:'وش أكلت؟ نوريك وش بيسوي في سكرك',lead:'اكتب أكلك أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.',mealAria:'وش أكلت',mic:'قلها بصوتك',micStop:'وقّف',go:'احسب',listen:'اسمع النتيجة',listenStop:'وقّف الصوت',chartAria:'منحنى السكر المتوقع',ramAria:'منحنى السكر في يوم رمضان',
+ar:{dir:'rtl',brand:'منحنى',navMeal:'وجبتك',navHow:'كيف يشتغل',navRam:'رمضان',dotSwap:'بدائل',dotTune:'التفاصيل',dotDates:'التمور',tipAfter:'بعد {m} د',h1:'وش أكلت؟ نوريك وش بيسوي في سكرك',lead:'اكتب أكلك أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.',mealAria:'وش أكلت',mic:'قلها بصوتك',micStop:'وقّف',go:'احسب',listen:'اسمع النتيجة',listenStop:'وقّف الصوت',chartAria:'منحنى السكر المتوقع',ramAria:'منحنى السكر في يوم رمضان',
 lgMeal:'وجبتك',lgAlt:'لو غيّرت',lgMe:'منحناك أنت',lgRd:'قراءاتك',lgLim:'حد ١٨٠',lgPlan:'كله مرة وحدة',lgPlan2:'مقسّم مع التراويح',
 pf:{healthy:'سليم',pre:'عنده بداية سكر',t2d:'سكري نوع ٢'},
 howH:'سهل، أربع خطوات',s1h:'قل وش أكلت',s1p:'اكتب أو تكلم بلهجتك. نفهم «صحن كبسة» و«ثلاث تمرات» ونحسب النشويات.',s2h:'شوف المنحنى',s2p:'الخط البني سكرك ساعة بساعة. المنطقة الفاتحة هي الطبيعي، والخط الأحمر حد ١٨٠.',s3h:'جرّب «لو غيّرت»',s3p:'نص الكمية، مشي ربع ساعة، أو تمر سكري بداله، وشوف الفرق على طول.',s4h:'اضبطه على جسمك',s4p:'إذا عندك جهاز سكر، حط قراءاتك ونعدّل المنحنى عليك أنت.',
@@ -316,6 +339,9 @@ wiH:'لو غيّرت شوي؟',wHalf:'آكل نص الكمية',wWalk:'أمشي 
 calH:'اضبطه على جسمك',calP:'حط قراءات جهاز السكر بعد هالوجبة، ونعدّل المنحنى على جسمك أنت.',calBtn:'اضبط منحناي',rd0:'صايم قبل الأكل',rdT:'بعد {m} د',calEx:'القراءات اللي تشوفها مثال. حط قراءاتك بدالها.',calDone:'منحناك الأخضر صار مضبوط على قراءاتك. كل ما زادت قراءاتك صار أدق.',calNeed:'نحتاج قراءتين على الأقل.',fBefore:'الفرق قبل',fAfter:'الفرق بعد',fUnit:'ملغ/دل بالمتوسط',fGain:'تحسّن الدقة',fOn:'على {n} قراءات',
 stPeak:'أعلى ما يوصل',stPeakS:'بعد {m} دقيقة · {c} غ نشويات',stAbove:'وقت فوق ١٨٠',stAboveS:'وبعد ساعتين {v}',stAlt:'لو غيّرت',stAltS:'أقل بـ {d}',stMe:'منحناك أنت',stMeS:'مضبوط على قراءاتك',min:'د',peakL:'أعلى {v}',eat:'الأكل',hr:'{h} س',
 stReading:'لحظة، نقرا أكلك…',stDone:'تم، هذا منحنى سكرك المتوقع.',stLocal:'قريناها بقاموسنا المحلي.',stRate:'الطلبات كثيرة الحين، استخدمنا قاموسنا.',stEmpty:'اكتب وش أكلت أول.',micNo:'الميكروفون مو مسموح، اكتب أكلك.',micErr:'ما اشتغل الميكروفون، جرّب مرة ثانية.',
+sgH:'وش آكل بداله؟ ونصايح لك',sgLead:'نقترح لك تغييرات بسيطة على وجبتك: بديل، كمية أقل، أو مشي بعد الأكل. وكل اقتراح نحسبه بنفس النموذج ونرتبه حسب كم ينزّل أعلى قراءة.',sgGo:'اقترح علي',sgBusy:'لحظة، نفكّر لك في بدائل…',sgDoneAI:'هذي اقتراحات الذكاء الاصطناعي، ومحسوبة بنموذجنا.',sgDoneLocal:'هذي اقتراحات جاهزة من عندنا، ومحسوبة بنموذجنا.',sgNone:'وجبتك أصلًا خفيفة، ما لقينا تغيير ينزّلها بشكل واضح.',sgBest:'الأفضل',sgPeak:'أعلى قراءة {a} بدل {b}',sgSmall:'فرق بسيط',sgShow:'شوفه على الرسم',sgShown:'معروض فوق',sgWalk:'+ مشي {m} د',sgNote:'الاقتراحات للتوعية، والأرقام من نموذج تقريبي. أي تغيير كبير في أكلك أو نشاطك، خصوصًا مع أدوية السكر، شاوِر فيه طبيبك.',
+kSwap:'بديل',kPortion:'كمية',kWalk:'حركة',kCombo:'مجموعة',
+loc:{swapDates:'بدّل التمر بسكري',swapDatesW:'التمر السكري مؤشره ٤٣٫٤ من أقل الأصناف.',half:'نص {f}',halfW:'{f} هو أكثر شي فيه نشويات في وجبتك.',walk:'امش نص ساعة بعد الأكل',walkW:'المشي يساعد العضلات تسحب السكر من الدم.',brown:'رز بني بدل الأبيض',brownW:'الرز البني أبطأ في رفع السكر (قيمة تقديرية).',combo:'نص {f} مع مشي ربع ساعة',comboW:'تغييرين صغار مع بعض يفرقون أكثر.',fewer:'قلّل التمر لحبتين',fewerW:'الكمية تفرق أكثر من الصنف.'},
 ramH:'يومك في رمضان',ramLead:'حط فطورك وسحورك، ونرسم سكرك من العصر لين عصر اليوم اللي بعده. وشوف وش يصير لو قسّمت فطورك ومشيت في التراويح.',rIft:'الفطور (أول ما تفطر)',rMain:'الأكل بعد الصلاة',rMainN:'إذا ما قسّمت، نحسبه مع الفطور على طول.',rSuh:'السحور',rTime:'الوقت',ramGo:'ارسم يومي',rSplit:'أقسّم: تمر وماء، وبعد الصلاة الأكل',rWalk:'أمشي في التراويح ٤٠ دقيقة',fast:'صيام',
 rmPeak:'أعلى بعد الفطور',rmPeakS:'الساعة {h}',rmPeak2:'لو قسّمت',rmPeak2S:'أقل بـ {d}',rmAbove:'وقت فوق ١٨٠',rmAboveS:'في اليوم كله',rmSuh:'أعلى بعد السحور',
 ramWarn:'الهبوط وقت الصيام يجي غالبًا من بعض أدوية السكر والإنسولين، ونموذجنا ما يحسب الأدوية. قبل رمضان قيّم خطر صيامك مع طبيبك بـ',ramLink:'حاسبة IDF-DAR',
@@ -325,7 +351,7 @@ disc:'أداة تعليمية تقريبية، ما تعطي جرعات دواء
 theme:{auto:'تلقائي',light:'فاتح',dark:'داكن'},
 say:(o)=>`أعلى سكر بيوصل له تقريبًا ${o.peak}، بعد ${o.at} دقيقة من الأكل. ${o.above>0?`وبيقعد فوق المية وثمانين حوالي ${o.above} دقيقة.`:'وما بيتعدى المية وثمانين.'} ولو غيّرت مثل ما اخترت، أعلى رقم بينزل لـ ${o.alt}.`,
 ex:{meal:'فطرت ٥ تمرات سلج وحبة صامولي وفنجالين قهوة',ift:'٣ تمرات خلاص وكاسة ماء',main:'صحن شوربة وسمبوسة ٢ وصحن كبسة',suh:'صحن فول وخبز وكاسة لبن'}},
-en:{dir:'ltr',brand:'Manhana',navMeal:'Your meal',navHow:'How it works',navRam:'Ramadan',dotTune:'Details',dotDates:'Dates',tipAfter:'after {m} min',h1:'What did you eat? See what it does to your sugar',lead:'Type your meal or say it out loud, the way you talk, and we draw what your blood sugar will do over the next four hours.',mealAria:'What did you eat',mic:'Say it',micStop:'Stop',go:'Calculate',listen:'Read it to me',listenStop:'Stop reading',chartAria:'Expected blood sugar curve',ramAria:'Blood sugar across a Ramadan day',
+en:{dir:'ltr',brand:'Manhana',navMeal:'Your meal',navHow:'How it works',navRam:'Ramadan',dotSwap:'Swaps',dotTune:'Details',dotDates:'Dates',tipAfter:'after {m} min',h1:'What did you eat? See what it does to your sugar',lead:'Type your meal or say it out loud, the way you talk, and we draw what your blood sugar will do over the next four hours.',mealAria:'What did you eat',mic:'Say it',micStop:'Stop',go:'Calculate',listen:'Read it to me',listenStop:'Stop reading',chartAria:'Expected blood sugar curve',ramAria:'Blood sugar across a Ramadan day',
 lgMeal:'Your meal',lgAlt:'If you change',lgMe:'Your own curve',lgRd:'Your readings',lgLim:'180 limit',lgPlan:'All at once',lgPlan2:'Split, with taraweeh walk',
 pf:{healthy:'Healthy',pre:'Prediabetes',t2d:'Type 2 diabetes'},
 howH:'Easy, four steps',s1h:'Say what you ate',s1p:'Type or talk naturally. We understand "a plate of kabsa" and "three dates" and count the carbs.',s2h:'See the curve',s2p:'The brown line is your sugar, hour by hour. The light band is normal; the red line is 180.',s3h:'Try "what if"',s3p:'Half the portion, a 15-minute walk, or Sukkari dates instead, and see the difference instantly.',s4h:'Tune it to your body',s4p:'If you have a glucose meter, enter your readings and we fit the curve to you.',
@@ -336,6 +362,9 @@ wiH:'What if you changed a little?',wHalf:'Eat half the amount',wWalk:'Walk 15 m
 calH:'Tune it to your body',calP:'Enter your meter readings after this meal and we fit the curve to your own body.',calBtn:'Fit my curve',rd0:'Fasting, before eating',rdT:'After {m} min',calEx:'The readings shown are an example. Replace them with yours.',calDone:'Your green curve now fits your readings. More readings make it more accurate.',calNeed:'We need at least two readings.',fBefore:'Error before',fAfter:'Error after',fUnit:'mg/dL on average',fGain:'Accuracy gain',fOn:'from {n} readings',
 stPeak:'Highest point',stPeakS:'after {m} min · {c} g carbs',stAbove:'Time above 180',stAboveS:'2 hours later: {v}',stAlt:'If you change',stAltS:'{d} lower',stMe:'Your own curve',stMeS:'fitted to your readings',min:'min',peakL:'peak {v}',eat:'meal',hr:'{h} h',
 stReading:'One moment, reading your meal…',stDone:'Done. This is your expected curve.',stLocal:'Read with our local dictionary.',stRate:'Too many requests right now; used our dictionary.',stEmpty:'Type what you ate first.',micNo:'Microphone not allowed; type your meal.',micErr:'The microphone did not start; try again.',
+sgH:'What could I eat instead? Tips for you',sgLead:'Small changes to your meal: a swap, a smaller portion, or a walk after eating. Each one is run through the same model and ranked by how much it lowers your peak.',sgGo:'Suggest',sgBusy:'One moment, finding swaps…',sgDoneAI:'Suggestions from AI, calculated with our model.',sgDoneLocal:'Built-in suggestions, calculated with our model.',sgNone:'Your meal is already light; no change lowers it clearly.',sgBest:'Best',sgPeak:'peak {a} instead of {b}',sgSmall:'small difference',sgShow:'Show on chart',sgShown:'Shown above',sgWalk:'+ {m} min walk',sgNote:'For awareness only; the numbers come from an approximate model. Discuss big changes in diet or activity with your doctor, especially if you take diabetes medicines.',
+kSwap:'Swap',kPortion:'Portion',kWalk:'Activity',kCombo:'Combo',
+loc:{swapDates:'Swap the dates for Sukkari',swapDatesW:'Sukkari has a GI of 43.4, among the lowest.',half:'Half the {f}',halfW:'{f} carries the most carbs in your meal.',walk:'Walk 30 minutes after eating',walkW:'Walking helps muscles pull sugar out of the blood.',brown:'Brown rice instead of white',brownW:'Brown rice raises sugar more slowly (estimated value).',combo:'Half the {f} plus a 15-minute walk',comboW:'Two small changes together make more difference.',fewer:'Cut the dates to two',fewerW:'The amount matters more than the variety.'},
 ramH:'Your day in Ramadan',ramLead:'Enter your iftar and suhoor and we draw your sugar from one afternoon to the next. See what happens if you split iftar and walk during taraweeh.',rIft:'Iftar (when you break the fast)',rMain:'Main meal after prayer',rMainN:'If you do not split, we count it with iftar.',rSuh:'Suhoor',rTime:'Time',ramGo:'Draw my day',rSplit:'Split: dates and water, then the meal after prayer',rWalk:'Walk 40 minutes during taraweeh',fast:'Fasting',
 rmPeak:'Highest after iftar',rmPeakS:'at {h}',rmPeak2:'If you split',rmPeak2S:'{d} lower',rmAbove:'Time above 180',rmAboveS:'across the day',rmSuh:'Highest after suhoor',
 ramWarn:'Lows during fasting mostly come from some diabetes medicines and insulin, and our model does not include medicines. Before Ramadan, assess your fasting risk with your doctor using the',ramLink:'IDF-DAR calculator',
@@ -373,7 +402,7 @@ const rtl=()=>lang==='ar';
 const BODY_DL=1.6*70,AG=0.9,TMAX=40;
 const sim=(p0,meals,walks,T,ov)=>{const p=Object.assign({},p0,ov||{});const dt=0.5;let G=p.Gb,X=0,I=p.Ib,Q1=0,Q2=0,E=0;const out=[];const ms=meals.map(m=>({t:m.t,q:m.items.reduce((s,i)=>s+i.carbs*1000*(i.gi/100),0),done:false}));
   for(let k=0;k<=T/dt;k++){const t=k*dt;for(const m of ms)if(!m.done&&t>=m.t){Q1+=m.q;m.done=true}if(k%2===0)out.push({t,g:G});
-    const w=walks.find(w=>t>=w.t&&t<w.t+w.dur);const on=w?w.k:0;E+=(on-E)/(on>E?8:30)*dt;const sg=p.SG+0.02*E;const Ra=AG*Q2/TMAX;
+    const w=walks.find(w=>t>=w.t&&t<w.t+w.dur);const on=w?w.k:0;E+=(on-E)/(on>E?8:30)*dt;const sg=p.SG+0.01*E;const Ra=AG*Q2/TMAX;
     const dQ1=-Q1/TMAX,dQ2=Q1/TMAX-Q2/TMAX,dG=-(sg+X)*G+p.SG*p.Gb+Ra/BODY_DL,dX=-p.p2*X+p.p2*p.SI*(I-p.Ib),dI=-p.n*(I-p.Ib)+p.beta*Math.max(G-p.Gb,0);
     Q1+=dQ1*dt;Q2+=dQ2*dt;G+=dG*dt;X+=dX*dt;I+=dI*dt}return out};
 const peakIn=(s,a,b)=>{let pk=null;for(const d of s)if(d.t>=a&&d.t<=b&&(!pk||d.g>pk.g))pk=d;return pk};
@@ -390,6 +419,13 @@ const localParse=text=>{const t=' '+toLatin(text).toLowerCase().replace(/[،,.+]
   return out};
 let sampleFn=null,ttsFn=null;
 const REF=()=>JSON.stringify({dates_study:DATES.map(d=>({name:dateName(d),gi:d.gi,country:d.c,carbs_per_date_g:7})),other_dates_gi_avg:55.2,foods_estimates:FOODS.map(f=>({name:nameOf(f),unit:f.u[lang==='ar'?0:1],carbs_g:f.c,gi:f.gi}))});
+let aiMode=null;
+const jsonOf=t=>{const m=String(t||'').match(/\{[\s\S]*\}/);return m?JSON.parse(m[0]):null};
+const aiAsk=async prompt=>{
+  if(sampleFn){if(typeof sampleFn.json==='function')return await sampleFn.json(prompt,{modelTier:'quick'});const r=await sampleFn(prompt,{modelTier:'quick'});return jsonOf(r.text)}
+  if(aiMode==='server'){const r=await fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt})});if(!r.ok)throw{code:r.status===429?'rate_limited':'server'};const j=await r.json();return jsonOf(j.text)}
+  throw{code:'none'}};
+const aiOn=()=>!!(sampleFn||aiMode==='server');
 const askClaude=async text=>{
   const prompt=`You are a dietitian. Parse this meal description (it may be in Saudi Arabic dialect or English) into foods and drinks with amount, available carbohydrate in grams, and glycemic index.
 Use this reference first. Date GI values come from published studies: country "sa" means source="study", country "ae" or "ae2" means source="studyAE"; a date variety not in the list uses GI 55.2 with source="avg"; other reference values are table estimates (source="table"). Anything not in the reference: estimate it and use source="estimate".
@@ -397,12 +433,10 @@ ${REF()}
 Meal: """${text.slice(0,600)}"""
 Write "name" and "qty" in ${lang==='ar'?'Arabic (short, Saudi wording)':'English'}.
 Return JSON only: {"items":[{"name":"...","qty":"...","carbs":number,"gi":number,"source":"study|studyAE|avg|table|estimate"}]}`;
-  let v;
-  if(typeof sampleFn.json==='function')v=await sampleFn.json(prompt,{modelTier:'quick'});
-  else{const r=await sampleFn(prompt,{modelTier:'quick'});const m=(r.text||'').match(/\{[\s\S]*\}/);v=m?JSON.parse(m[0]):null}
+  const v=await aiAsk(prompt);
   const arr=v&&Array.isArray(v.items)?v.items:[];
   return arr.map(i=>({name:String(i.name||'').slice(0,40),qty:String(i.qty||'').slice(0,30),carbs:Math.max(0,Math.min(300,+i.carbs||0)),gi:Math.max(0,Math.min(110,+i.gi||0)),source:['study','studyAE','avg','table','estimate'].includes(i.source)?i.source:'estimate'}))};
-const parse=async(text,statusEl)=>{if(sampleFn){try{const r=await askClaude(text);if(r.length)return{items:r,by:'ai'}}catch(e){if(e&&e.code==='not_granted')sampleFn=null;if(statusEl)statusEl.textContent=tr(e&&e.code==='rate_limited'?'stRate':'stLocal')}}return{items:localParse(text),by:'local'}};
+const parse=async(text,statusEl)=>{if(aiOn()){try{const r=await askClaude(text);if(r.length)return{items:r,by:'ai'}}catch(e){if(e&&e.code==='not_granted')sampleFn=null;if(statusEl)statusEl.textContent=tr(e&&e.code==='rate_limited'?'stRate':'stLocal')}}return{items:localParse(text),by:'local'}};
 
 // ---------- chart ----------
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -454,8 +488,9 @@ const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
 // ---------- main meal ----------
 const READ_T=[0,30,60,120,180],EXAMPLE={0:146,30:203,60:268,120:274,180:208};
 const readings=()=>READ_T.map(t=>({t,g:+$('r'+t).value})).filter(r=>r.g>=40&&r.g<=500);
-const whatIf=()=>items.map(it=>({...it,carbs:it.carbs*($('wHalf').checked?0.5:1),gi:$('wSwap').checked&&(/^study|avg/.test(it.source)||/تمر|date/i.test(it.name))?43.4:it.gi}));
-const drawMain=()=>{const p=PROFILES[profile];const A=sim(p,[{t:0,items}],[],240),B=sim(p,[{t:0,items:whatIf()}],$('wWalk').checked?[{t:15,dur:15,k:1}]:[],240);
+let altOverride=null;
+const whatIf=()=>altOverride?altOverride.items:items.map(it=>({...it,carbs:it.carbs*($('wHalf').checked?0.5:1),gi:$('wSwap').checked&&(/^study|avg/.test(it.source)||/تمر|date/i.test(it.name))?43.4:it.gi}));
+const drawMain=()=>{const p=PROFILES[profile];const A=sim(p,[{t:0,items}],[],240),B=sim(p,[{t:0,items:whatIf()}],altOverride?(altOverride.walk?[{t:15,dur:altOverride.walk,k:1}]:[]):($('wWalk').checked?[{t:15,dur:15,k:1}]:[]),240);
   const M=fitted?sim({...p,Gb:fitted.Gb},[{t:0,items}],[],240,{SI:p.SI*fitted.m1,beta:p.beta*fitted.m2}):null;
   const series=[{data:A,color:'var(--date)',name:S().lgMeal},{data:B,color:'var(--b)',dash:'8 5',w:3,name:S().lgAlt}];if(M)series.push({data:M,color:'var(--me)',name:S().lgMe});
   const pk=peakIn(A,0,240);
@@ -468,11 +503,12 @@ const drawMain=()=>{const p=PROFILES[profile];const A=sim(p,[{t:0,items}],[],240
   lastSay=S().say({peak:Math.round(pk.g),at:Math.round(pk.t),above,alt:Math.round(pB.g)})};
 const renderItems=()=>{$('items').innerHTML=items.length?items.map((it,i)=>`<tr><td>${esc(it.name)}<div class="msub">${esc(it.qty)} · <span class="tag ${/^study/.test(it.source)?'s':''}">${esc(S().src[it.source])}</span></div></td><td>${esc(it.qty)}</td><td class="n"><input type="number" min="0" max="300" data-i="${i}" data-f="carbs" value="${Math.round(it.carbs)}" aria-label="${esc(S().thCarb+' '+it.name)}"></td><td class="n"><input type="number" min="0" max="110" data-i="${i}" data-f="gi" value="${+(+it.gi).toFixed(1)}" aria-label="${esc(S().thGi+' '+it.name)}"></td><td><span class="tag ${/^study/.test(it.source)?'s':''}">${esc(S().src[it.source])}</span></td></tr>`).join(''):`<tr><td colspan="5" class="note">${esc(S().noItems)}</td></tr>`};
 $('items').addEventListener('input',e=>{const el=e.target;if(!el.dataset.f)return;items[+el.dataset.i][el.dataset.f]=Math.max(0,+el.value||0);fitted=null;$('fitOut').innerHTML='';animate=false;drawMain();animate=true});
-for(const id of['wHalf','wWalk','wSwap'])$(id).addEventListener('change',drawMain);
+for(const id of['wHalf','wWalk','wSwap'])$(id).addEventListener('change',()=>{altOverride=null;markSug();drawMain()});
 let parsedBy='ex';
 const run=async()=>{const text=$('mealTxt').value.trim();if(!text){$('status').textContent=S().stEmpty;return}
   fitted=null;$('fitOut').innerHTML='';$('go').disabled=true;$('status').textContent=S().stReading;
   const r=await parse(text,$('status'));items=r.items;parsedBy=r.by;$('go').disabled=false;if(r.by==='ai'||!sampleFn)$('status').textContent=S().stDone;
+  altOverride=null;sugs=localSugs();renderSugs();$('sgStatus').textContent='';
   $('parsedBy').textContent=r.by==='ai'?S().byAI:S().byLocal;renderItems();drawMain();$('fitNote').textContent=S().calEx};
 $('go').addEventListener('click',run);
 const fit=()=>{const p=PROFILES[profile],R=readings();if(R.length<2){$('fitNote').textContent=S().calNeed;return}
@@ -482,6 +518,40 @@ const fit=()=>{const p=PROFILES[profile],R=readings();if(R.length<2){$('fitNote'
   fitted={Gb,m1:best.m1,m2:best.m2,base,e:best.e,n:R.length};showFit();drawMain()};
 const showFit=()=>{if(!fitted){$('fitOut').innerHTML='';return}const f=fitted;$('fitOut').innerHTML=statsHTML([{l:S().fBefore,v:f.base,sub:S().fUnit},{l:S().fAfter,v:f.e,sub:S().fUnit,cls:'ok'},{l:S().fGain,v:f.base>0?(1-f.e/f.base)*100:0,suf:lang==='ar'?'٪':'%',sub:tr('fOn',{n:num(f.n)}),cls:'ok'}]);countUp($('fitOut'));$('fitNote').textContent=S().calDone};
 $('fit').addEventListener('click',fit);
+
+// ---------- swaps & tips ----------
+let sugs=[];
+const markSug=()=>{for(const c of document.querySelectorAll('.sug')){const on=altOverride&&altOverride.i===+c.dataset.i;c.classList.toggle('on',on);const b=c.querySelector('button');if(b)b.textContent=on?S().sgShown:S().sgShow}};
+const localSugs=()=>{const l=S().loc,out=[],big=[...items].sort((a,b)=>b.carbs-a.carbs)[0];const isDate=it=>/^study|avg/.test(it.source)||/تمر|date/i.test(it.name);
+  if(items.some(it=>isDate(it)&&it.gi>45))out.push({title:l.swapDates,why:l.swapDatesW,kind:'swap',items:items.map(it=>isDate(it)?{...it,name:lang==='ar'?'تمر سكري':'Sukkari dates',gi:43.4,source:'study'}:it),walk:0});
+  const dt=items.find(it=>isDate(it)&&it.carbs>14);if(dt)out.push({title:l.fewer,why:l.fewerW,kind:'portion',items:items.map(it=>it===dt?{...it,carbs:14,qty:lang==='ar'?'٢ حبات':'2 dates'}:it),walk:0});
+  if(big&&big.carbs>0)out.push({title:l.half.replace('{f}',big.name),why:l.halfW.replace('{f}',big.name),kind:'portion',items:items.map(it=>it===big?{...it,carbs:it.carbs/2}:it),walk:0});
+  const rice=items.find(it=>/رز|أرز|كبسة|مندي|rice|kabsa/i.test(it.name));if(rice)out.push({title:l.brown,why:l.brownW,kind:'swap',items:items.map(it=>it===rice?{...it,name:lang==='ar'?'رز بني':'Brown rice',gi:55,source:'table'}:it),walk:0});
+  out.push({title:l.walk,why:l.walkW,kind:'walk',items:items.slice(),walk:30});
+  if(big&&big.carbs>0)out.push({title:l.combo.replace('{f}',big.name),why:l.comboW,kind:'combo',items:items.map(it=>it===big?{...it,carbs:it.carbs/2}:it),walk:15});
+  return out};
+const aiSugs=async()=>{const prompt=`You are a Saudi dietitian. A person ate this meal: ${JSON.stringify(items.map(i=>({name:i.name,qty:i.qty,carbs:Math.round(i.carbs),gi:i.gi})))}. Health profile: ${profile}.
+Suggest 5 realistic, culturally Saudi changes that would lower the blood sugar rise: mix food swaps, smaller portions, a walk after eating, and one combination. No medicines, no supplements, no extreme diets, keep it a normal satisfying meal.
+Reference values to use when relevant: ${REF()}
+For each suggestion return the FULL modified meal (every item, changed or not) with carbs in grams and glycemic index, and walk_min of 0, 15 or 30 (minutes of walking starting 15 minutes after eating).
+Write "title" (max 6 words) and "why" (one short sentence) in ${lang==='ar'?'simple Saudi Arabic dialect':'plain English'}; "kind" is swap|portion|walk|combo.
+Return JSON only: {"suggestions":[{"title":"...","why":"...","kind":"swap","walk_min":0,"items":[{"name":"...","qty":"...","carbs":number,"gi":number,"source":"study|studyAE|avg|table|estimate"}]}]}`;
+  const v=await aiAsk(prompt);const arr=v&&Array.isArray(v.suggestions)?v.suggestions:[];
+  return arr.slice(0,6).map(x=>({title:String(x.title||'').slice(0,60),why:String(x.why||'').slice(0,160),kind:['swap','portion','walk','combo'].includes(x.kind)?x.kind:'swap',walk:[0,15,30].includes(+x.walk_min)?+x.walk_min:0,
+    items:(Array.isArray(x.items)?x.items:[]).slice(0,12).map(i=>({name:String(i.name||'').slice(0,40),qty:String(i.qty||'').slice(0,30),carbs:Math.max(0,Math.min(300,+i.carbs||0)),gi:Math.max(0,Math.min(110,+i.gi||0)),source:['study','studyAE','avg','table','estimate'].includes(i.source)?i.source:'estimate'}))})).filter(x=>x.title&&x.items.length)};
+const spark=(a,b)=>{const W=300,H=76,all=a.concat(b).map(d=>d.g),lo=Math.min(...all)-5,hi=Math.max(...all)+5;const x=t=>rtl()?W-(t/240)*W:(t/240)*W,y=g=>H-4-(g-lo)/(hi-lo)*(H-8);const p=s=>s.filter((d,i)=>i%4===0).map((d,i)=>(i?'L':'M')+x(d.t).toFixed(1)+' '+y(d.g).toFixed(1)).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${180>lo&&180<hi?`<line x1="0" x2="${W}" y1="${y(180)}" y2="${y(180)}" stroke="var(--hi)" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>`:''}<path d="${p(a)}" fill="none" stroke="var(--date)" stroke-width="3" vector-effect="non-scaling-stroke"/><path d="${p(b)}" fill="none" stroke="var(--me)" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>`};
+const renderSugs=()=>{const p=PROFILES[profile],base=sim(p,[{t:0,items}],[],240),pk0=peakIn(base,0,240).g;
+  const scored=sugs.map((sg,i)=>{const c=sim(p,[{t:0,items:sg.items}],sg.walk?[{t:15,dur:sg.walk,k:1}]:[],240);return{...sg,i,curve:c,pk:peakIn(c,0,240).g,drop:pk0-peakIn(c,0,240).g}}).filter(x=>x.drop>0.5).sort((a,b)=>b.drop-a.drop);
+  sugs=scored;if(!scored.length){$('sugs').innerHTML=`<p class="note">${esc(S().sgNone)}</p>`;return}
+  const K={swap:S().kSwap,portion:S().kPortion,walk:S().kWalk,combo:S().kCombo};
+  $('sugs').innerHTML=scored.map((x,j)=>`<div class="sug ${j===0?'best':''}" data-i="${x.i}">${j===0?`<span class="badge">${esc(S().sgBest)}</span>`:''}<span class="kind">${esc(K[x.kind])}${x.walk?' · '+esc(tr('sgWalk',{m:num(x.walk)})):''}</span><h3>${esc(x.title)}</h3><p class="note" style="margin:0">${esc(x.why)}</p>${spark(base,x.curve)}<div class="delta"><b>−${num(x.drop)}</b><span>${esc(x.drop<8?S().sgSmall+' · ':'')}${esc(tr('sgPeak',{a:num(x.pk),b:num(pk0)}))}</span></div><button type="button" data-i="${x.i}">${esc(S().sgShow)}</button></div>`).join('');
+  if(!RM)for(const [j,c] of [...$('sugs').children].entries()){c.animate([{opacity:0,transform:'translateY(18px) scale(.97)'},{opacity:1,transform:'none'}],{duration:520,delay:j*80,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})}
+  markSug()};
+$('sugs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const x=sugs.find(s=>s.i===+b.dataset.i);if(!x)return;altOverride={i:x.i,items:x.items,walk:x.walk};markSug();drawMain();$('top').scrollIntoView({behavior:RM?'auto':'smooth'})});
+$('sgGo').addEventListener('click',async()=>{$('sgGo').disabled=true;$('sgStatus').textContent=S().sgBusy;let by='local';
+  try{if(aiOn()){const r=await aiSugs();if(r.length){sugs=r;by='ai'}else sugs=localSugs()}else sugs=localSugs()}catch(e){sugs=localSugs();if(e&&e.code==='not_granted')sampleFn=null}
+  altOverride=null;renderSugs();$('sgStatus').textContent=by==='ai'?S().sgDoneAI:S().sgDoneLocal;$('sgGo').disabled=false});
 
 // ---------- Ramadan ----------
 const START=16*60;
@@ -519,7 +589,7 @@ const applyLang=()=>{const s=S();document.documentElement.lang=lang;document.doc
   $('mealTxt').value=s.ex.meal;$('rIft').value=s.ex.ift;$('rMain').value=s.ex.main;$('rSuh').value=s.ex.suh;
   items=localParse(s.ex.meal);ram={ift:localParse(s.ex.ift),main:localParse(s.ex.main),suh:localParse(s.ex.suh)};fitted=null;
   $('parsedBy').textContent=s.byEx;$('status').textContent='';$('ramStatus').textContent='';$('fitNote').textContent=s.calEx;
-  applyTheme();renderItems();drawSky();drawMain();fit();drawRam()};
+  applyTheme();renderItems();drawSky();altOverride=null;sugs=localSugs();drawMain();fit();drawRam();renderSugs();$('sgStatus').textContent=''};
 const applyTheme=()=>{const r=document.documentElement;if(theme==='auto'){if(viewerTheme)r.setAttribute('data-theme',viewerTheme);else r.removeAttribute('data-theme')}else r.setAttribute('data-theme',theme);
   const ic={auto:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',light:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.6 3.6l1.4 1.4M15 15l1.4 1.4M3.6 16.4 5 15M15 5l1.4-1.4"/></g></svg>',dark:'<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M15 13.5A7 7 0 0 1 7 3a7 7 0 1 0 8 10.5z" fill="currentColor"/></svg>'};
   $('bTheme').innerHTML=ic[theme]+'<span style="margin-inline-start:6px">'+esc(S().theme[theme])+'</span>'};
@@ -542,7 +612,7 @@ const decorateSadu=()=>{let n=0;for(const sv of document.querySelectorAll('svg.s
   sv.insertAdjacentHTML('beforeend',g+'</g>')}};
 decorateSadu();addEventListener('resize',()=>{clearTimeout(window.__sd);window.__sd=setTimeout(decorateSadu,200)});
 const pages=[...document.querySelectorAll('.page')];
-const dotKeys={top:'navMeal',how:'navHow',tune:'dotTune',ramadan:'navRam',dates:'dotDates'};
+const dotKeys={top:'navMeal',how:'navHow',tune:'dotTune',swap:'dotSwap',ramadan:'navRam',dates:'dotDates'};
 const drawDots=()=>{$('dots').innerHTML=pages.map(p=>`<a href="#${p.id}" data-p="${p.id}"><span>${esc(S()[dotKeys[p.id]])}</span></a>`).join('')};
 drawDots();$('bLang').addEventListener('click',drawDots);
 if(!RM&&'IntersectionObserver' in window){
@@ -562,7 +632,18 @@ let ticking=false;const onScroll=()=>{if(ticking)return;ticking=true;requestAnim
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
 // ---------- capabilities: AI, voice in, voice out ----------
-const boot=async()=>{if(!window.claude||!window.claude.use)return;
+const bootPublic=async()=>{
+  try{const r=await fetch('/api/ai',{method:'GET'});if(r.ok){const j=await r.json();if(j&&j.ok)aiMode='server'}}catch(e){}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(SR){const mic=$('mic');mic.hidden=false;let rec=null;
+    mic.addEventListener('click',()=>{if(rec){rec.stop();return}rec=new SR();rec.lang=lang==='ar'?'ar-SA':'en-US';rec.interimResults=true;$('mealTxt').value='';mic.classList.add('on');mic.textContent=S().micStop;
+      rec.onresult=e=>{let fin='',part='';for(const r of e.results)(r.isFinal?(fin+=r[0].transcript+' '):(part+=r[0].transcript));$('mealTxt').value=fin.trim();$('status').textContent=part?'… '+part:''};
+      rec.onerror=e=>{$('status').textContent=e.error==='not-allowed'?S().micNo:S().micErr};
+      rec.onend=()=>{rec=null;mic.classList.remove('on');mic.textContent=S().mic;if($('mealTxt').value.trim())run()};
+      try{rec.start()}catch(e){rec=null;mic.classList.remove('on')}})}
+  if(window.speechSynthesis){const b=$('listen');b.hidden=false;
+    b.addEventListener('click',()=>{if(speechSynthesis.speaking){speechSynthesis.cancel();b.textContent=S().listen;return}const u=new SpeechSynthesisUtterance(lastSay);u.lang=lang==='ar'?'ar-SA':'en-US';const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith(lang==='ar'?'ar':'en'));if(v)u.voice=v;u.onend=()=>{b.textContent=S().listen};b.textContent=S().listenStop;speechSynthesis.speak(u)})}};
+const boot=async()=>{if(!window.claude||!window.claude.use){bootPublic();return}
   try{sampleFn=await window.claude.use('sample')}catch(e){sampleFn=null}
   let d=null;try{d=await window.claude.use('dictation')}catch(e){d=null}
   if(d){const mic=$('mic');mic.hidden=false;let on=false;
