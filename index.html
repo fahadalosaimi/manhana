@@ -417,7 +417,7 @@ const NUMW={'قطعة':1,'علبة':1,'تمرتين':2,'حبة':1,'حبه':1,'و
 
 let lang='ar',theme='auto',profile='t2d',items=[],fitted=null,animate=true,ramPlan=null,ramAlt=null,lastSay='';
 const viewerTheme=document.documentElement.getAttribute('data-theme');
-try{lang=localStorage.getItem('mn-lang')||lang;theme=localStorage.getItem('mn-theme')||theme;profile=localStorage.getItem('mn-profile')||profile;if(localStorage.getItem('mn-big')==='1')document.body.classList.add('big')}catch(e){}
+try{lang=localStorage.getItem('mn-lang')||lang;theme=localStorage.getItem('mn-theme')||theme;if(!['auto','light','dark'].includes(theme))theme='auto';profile=localStorage.getItem('mn-profile')||profile;if(localStorage.getItem('mn-big')==='1')document.body.classList.add('big')}catch(e){}
 if(!L[lang])lang='ar';if(!PROFILES[profile])profile='t2d';
 const $=id=>document.getElementById(id);
 const S=()=>L[lang];
@@ -453,7 +453,11 @@ let aiMode=null;
 const jsonOf=t=>{const m=String(t||'').match(/\{[\s\S]*\}/);return m?JSON.parse(m[0]):null};
 const aiAsk=async prompt=>{
   if(sampleFn){if(typeof sampleFn.json==='function')return await sampleFn.json(prompt,{modelTier:'quick'});const r=await sampleFn(prompt,{modelTier:'quick'});return jsonOf(r.text)}
-  if(aiMode==='server'){const r=await fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt})});if(!r.ok)throw{code:r.status===429?'rate_limited':'server'};const j=await r.json();return jsonOf(j.text)}
+  throw{code:'none'}};
+// inside Claude: the page builds the prompt; on the public site: the server builds it from a named task
+const aiRun=async(task,payload,prompt)=>{
+  if(sampleFn)return aiAsk(prompt());
+  if(aiMode==='server'){const r=await fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({task,lang,ref:REF(),...payload})});if(!r.ok)throw{code:r.status===429?'rate_limited':'server'};const j=await r.json();return j&&j.data}
   throw{code:'none'}};
 const aiOn=()=>!!(sampleFn||aiMode==='server');
 const askClaude=async text=>{
@@ -463,7 +467,7 @@ ${REF()}
 Meal: """${text.slice(0,600)}"""
 Write "name" and "qty" in ${lang==='ar'?'Arabic (short, Saudi wording)':'English'}.
 Return JSON only: {"items":[{"name":"...","qty":"...","carbs":number,"gi":number,"source":"study|studyAE|avg|table|estimate"}]}`;
-  const v=await aiAsk(prompt);
+  const v=await aiRun('parse',{text:text.slice(0,600)},()=>prompt);
   const arr=v&&Array.isArray(v.items)?v.items:[];
   return arr.map(i=>({name:String(i.name||'').slice(0,40),qty:String(i.qty||'').slice(0,30),carbs:Math.max(0,Math.min(300,+i.carbs||0)),gi:Math.max(0,Math.min(110,+i.gi||0)),source:['study','studyAE','avg','table','estimate'].includes(i.source)?i.source:'estimate'}))};
 const parse=async(text,statusEl)=>{if(aiOn()){try{const r=await askClaude(text);if(r.length)return{items:r,by:'ai'}}catch(e){if(e&&e.code==='not_granted')sampleFn=null;if(statusEl)statusEl.textContent=tr(e&&e.code==='rate_limited'?'stRate':'stLocal')}}return{items:localParse(text),by:'local'}};
@@ -544,9 +548,9 @@ $('go').addEventListener('click',run);
 $('chips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('mealTxt').value=b.textContent;run()});
 const fit=()=>{const p=PROFILES[profile],R=readings();if(R.length<2){$('fitNote').textContent=S().calNeed;return}
   const r0=R.find(r=>r.t===0),Gb=r0?r0.g:p.Gb,mae=s=>R.reduce((a,r)=>a+Math.abs(s[r.t].g-r.g),0)/R.length;
-  const base=mae(sim(p,[{t:0,items}],[],240));let best={e:Infinity};
-  for(let i=0;i<21;i++)for(let j=0;j<21;j++){const m1=0.25*16**(i/20),m2=0.25*16**(j/20);const e=mae(sim({...p,Gb},[{t:0,items}],[],240,{SI:p.SI*m1,beta:p.beta*m2}));if(e<best.e)best={e,m1,m2}}
-  fitted={Gb,m1:best.m1,m2:best.m2,base,e:best.e,n:R.length};showFit();drawMain()};
+  const base=mae(sim(p,[{t:0,items}],[],240));let best={e:base,m1:1,m2:1,Gb:p.Gb};
+  for(const g of [...new Set([Gb,p.Gb])])for(let i=0;i<21;i++)for(let j=0;j<21;j++){const m1=0.25*16**(i/20),m2=0.25*16**(j/20);const e=mae(sim({...p,Gb:g},[{t:0,items}],[],240,{SI:p.SI*m1,beta:p.beta*m2}));if(e<best.e)best={e,m1,m2,Gb:g}}
+  fitted={Gb:best.Gb,m1:best.m1,m2:best.m2,base,e:best.e,n:R.length};showFit();drawMain()};
 const showFit=()=>{if(!fitted){$('fitOut').innerHTML='';return}const f=fitted;$('fitOut').innerHTML=statsHTML([{l:S().fBefore,v:f.base,sub:S().fUnit},{l:S().fAfter,v:f.e,sub:S().fUnit,cls:'ok'},{l:S().fGain,v:f.base>0?(1-f.e/f.base)*100:0,suf:lang==='ar'?'٪':'%',sub:tr('fOn',{n:num(f.n)}),cls:'ok'}]);countUp($('fitOut'));$('fitNote').textContent=S().calDone};
 $('fit').addEventListener('click',fit);
 
@@ -567,7 +571,7 @@ Reference values to use when relevant: ${REF()}
 For each suggestion return the FULL modified meal (every item, changed or not) with carbs in grams and glycemic index, and walk_min of 0, 15 or 30 (minutes of walking starting 15 minutes after eating).
 Write "title" (max 6 words) and "why" (one short sentence) in ${lang==='ar'?'simple Saudi Arabic dialect':'plain English'}; "kind" is swap|portion|walk|combo.
 Return JSON only: {"suggestions":[{"title":"...","why":"...","kind":"swap","walk_min":0,"items":[{"name":"...","qty":"...","carbs":number,"gi":number,"source":"study|studyAE|avg|table|estimate"}]}]}`;
-  const v=await aiAsk(prompt);const arr=v&&Array.isArray(v.suggestions)?v.suggestions:[];
+  const v=await aiRun('suggest',{profile,items:items.slice(0,12).map(i=>({name:i.name,qty:i.qty,carbs:Math.round(i.carbs),gi:i.gi,source:i.source}))},()=>prompt);const arr=v&&Array.isArray(v.suggestions)?v.suggestions:[];
   return arr.slice(0,6).map(x=>({title:String(x.title||'').slice(0,60),why:String(x.why||'').slice(0,160),kind:['swap','portion','walk','combo'].includes(x.kind)?x.kind:'swap',walk:[0,15,30].includes(+x.walk_min)?+x.walk_min:0,
     items:(Array.isArray(x.items)?x.items:[]).slice(0,12).map(i=>({name:String(i.name||'').slice(0,40),qty:String(i.qty||'').slice(0,30),carbs:Math.max(0,Math.min(300,+i.carbs||0)),gi:Math.max(0,Math.min(110,+i.gi||0)),source:['study','studyAE','avg','table','estimate'].includes(i.source)?i.source:'estimate'}))})).filter(x=>x.title&&x.items.length)};
 const spark=(a,b)=>{const W=300,H=76,all=a.concat(b).map(d=>d.g),lo=Math.min(...all)-5,hi=Math.max(...all)+5;const x=t=>rtl()?W-(t/240)*W:(t/240)*W,y=g=>H-4-(g-lo)/(hi-lo)*(H-8);const p=s=>s.filter((d,i)=>i%4===0).map((d,i)=>(i?'L':'M')+x(d.t).toFixed(1)+' '+y(d.g).toFixed(1)).join('');
