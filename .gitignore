@@ -5,3 +5,6 @@ __pycache__/
 .env.*
 .DS_Store
 .vercel/
+
+# Font files: licence to confirm before publishing in this public repo
+fonts/
