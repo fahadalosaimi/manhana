@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>منحنى التمر</title>
+<title>منحنى</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -164,6 +164,9 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
 .sug .delta span{font-size:14px;color:var(--mute)}
 .sug button{margin-top:auto}
 .sug.on{outline:3px solid var(--b);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chips button{min-height:40px;padding:0 14px;border-radius:20px;font-weight:400;font-size:15px;background:var(--card)}
+.chips button:hover{border-color:var(--date)}
 @media(max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.meals{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px){.links a{padding:8px 10px}.dots{display:none}.cols,.gloss{grid-template-columns:minmax(0,1fr)}.ask{grid-template-columns:minmax(0,1fr) auto}.ask textarea{grid-column:1/-1}.links{order:3;width:100%;justify-content:space-between}}
 @media(max-width:600px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:12px}.stat b{font-size:26px}.it th:nth-child(2),.it td:nth-child(2),.it th:nth-child(5),.it td:nth-child(5){display:none}.msub{display:block}}
@@ -210,6 +213,7 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
       <button type="button" id="mic" hidden data-t="mic">قلها بصوتك</button>
       <button type="button" class="go" id="go" data-t="go">احسب</button>
     </div>
+    <div class="chips" id="chips"></div>
     <div class="status" id="status" role="status"></div>
     <div class="row">
       <div class="seg" role="group" id="profiles"></div>
@@ -328,7 +332,7 @@ footer{border-top:1px solid var(--line);padding:22px max(5vw,16px);color:var(--m
 <script>
 {
 const L={
-ar:{dir:'rtl',brand:'منحنى',navMeal:'وجبتك',navHow:'كيف يشتغل',navRam:'رمضان',dotSwap:'بدائل',dotTune:'التفاصيل',dotDates:'التمور',tipAfter:'بعد {m} د',h1:'وش أكلت؟ نوريك وش بيسوي في سكرك',lead:'اكتب أكلك أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.',mealAria:'وش أكلت',mic:'قلها بصوتك',micStop:'وقّف',go:'احسب',listen:'اسمع النتيجة',listenStop:'وقّف الصوت',chartAria:'منحنى السكر المتوقع',ramAria:'منحنى السكر في يوم رمضان',
+ar:{dir:'rtl',brand:'منحنى',navMeal:'وجبتك',navHow:'كيف يشتغل',navRam:'رمضان',dotSwap:'بدائل',dotTune:'التفاصيل',dotDates:'التمور',tipAfter:'بعد {m} د',h1:'وش أكلت؟ نوريك وش بيسوي في سكرك',lead:'أي أكل أو شرب: كبسة، شاورما، حلا، عصير، تمر… اكتبه أو قله بصوتك مثل ما تتكلم، ونرسم لك وش بيصير لسكرك في الأربع ساعات الجاية.',mealAria:'وش أكلت',mic:'قلها بصوتك',micStop:'وقّف',go:'احسب',listen:'اسمع النتيجة',listenStop:'وقّف الصوت',chartAria:'منحنى السكر المتوقع',ramAria:'منحنى السكر في يوم رمضان',
 lgMeal:'وجبتك',lgAlt:'لو غيّرت',lgMe:'منحناك أنت',lgRd:'قراءاتك',lgLim:'حد ١٨٠',lgPlan:'كله مرة وحدة',lgPlan2:'مقسّم مع التراويح',
 pf:{healthy:'سليم',pre:'عنده بداية سكر',t2d:'سكري نوع ٢'},
 howH:'سهل، أربع خطوات',s1h:'قل وش أكلت',s1p:'اكتب أو تكلم بلهجتك. نفهم «صحن كبسة» و«ثلاث تمرات» ونحسب النشويات.',s2h:'شوف المنحنى',s2p:'الخط البني سكرك ساعة بساعة. المنطقة الفاتحة هي الطبيعي، والخط الأحمر حد ١٨٠.',s3h:'جرّب «لو غيّرت»',s3p:'نص الكمية، مشي ربع ساعة، أو تمر سكري بداله، وشوف الفرق على طول.',s4h:'اضبطه على جسمك',s4p:'إذا عندك جهاز سكر، حط قراءاتك ونعدّل المنحنى عليك أنت.',
@@ -342,6 +346,7 @@ stReading:'لحظة، نقرا أكلك…',stDone:'تم، هذا منحنى س�
 sgH:'وش آكل بداله؟ ونصايح لك',sgLead:'نقترح لك تغييرات بسيطة على وجبتك: بديل، كمية أقل، أو مشي بعد الأكل. وكل اقتراح نحسبه بنفس النموذج ونرتبه حسب كم ينزّل أعلى قراءة.',sgGo:'اقترح علي',sgBusy:'لحظة، نفكّر لك في بدائل…',sgDoneAI:'هذي اقتراحات الذكاء الاصطناعي، ومحسوبة بنموذجنا.',sgDoneLocal:'هذي اقتراحات جاهزة من عندنا، ومحسوبة بنموذجنا.',sgNone:'وجبتك أصلًا خفيفة، ما لقينا تغيير ينزّلها بشكل واضح.',sgBest:'الأفضل',sgPeak:'أعلى قراءة {a} بدل {b}',sgSmall:'فرق بسيط',sgShow:'شوفه على الرسم',sgShown:'معروض فوق',sgWalk:'+ مشي {m} د',sgNote:'الاقتراحات للتوعية، والأرقام من نموذج تقريبي. أي تغيير كبير في أكلك أو نشاطك، خصوصًا مع أدوية السكر، شاوِر فيه طبيبك.',
 kSwap:'بديل',kPortion:'كمية',kWalk:'حركة',kCombo:'مجموعة',
 loc:{swapDates:'بدّل التمر بسكري',swapDatesW:'التمر السكري مؤشره ٤٣٫٤ من أقل الأصناف.',half:'نص {f}',halfW:'{f} هو أكثر شي فيه نشويات في وجبتك.',walk:'امش نص ساعة بعد الأكل',walkW:'المشي يساعد العضلات تسحب السكر من الدم.',brown:'رز بني بدل الأبيض',brownW:'الرز البني أبطأ في رفع السكر (قيمة تقديرية).',combo:'نص {f} مع مشي ربع ساعة',comboW:'تغييرين صغار مع بعض يفرقون أكثر.',fewer:'قلّل التمر لحبتين',fewerW:'الكمية تفرق أكثر من الصنف.'},
+chipsL:['صحن كبسة دجاج وكاسة لبن','شاورما وبيبسي','قطعة كيكة وشاي','٣ تمرات سكري وقهوة'],
 ramH:'يومك في رمضان',ramLead:'حط فطورك وسحورك، ونرسم سكرك من العصر لين عصر اليوم اللي بعده. وشوف وش يصير لو قسّمت فطورك ومشيت في التراويح.',rIft:'الفطور (أول ما تفطر)',rMain:'الأكل بعد الصلاة',rMainN:'إذا ما قسّمت، نحسبه مع الفطور على طول.',rSuh:'السحور',rTime:'الوقت',ramGo:'ارسم يومي',rSplit:'أقسّم: تمر وماء، وبعد الصلاة الأكل',rWalk:'أمشي في التراويح ٤٠ دقيقة',fast:'صيام',
 rmPeak:'أعلى بعد الفطور',rmPeakS:'الساعة {h}',rmPeak2:'لو قسّمت',rmPeak2S:'أقل بـ {d}',rmAbove:'وقت فوق ١٨٠',rmAboveS:'في اليوم كله',rmSuh:'أعلى بعد السحور',
 ramWarn:'الهبوط وقت الصيام يجي غالبًا من بعض أدوية السكر والإنسولين، ونموذجنا ما يحسب الأدوية. قبل رمضان قيّم خطر صيامك مع طبيبك بـ',ramLink:'حاسبة IDF-DAR',
@@ -350,8 +355,8 @@ mH:'كيف نحسبها',m1:'نموذج يتبع الأكل من المعدة ل
 disc:'أداة تعليمية تقريبية، ما تعطي جرعات دواء ولا إنسولين. أي قرار علاجي، خصوصًا الصيام، يكون مع طبيبك.',
 theme:{auto:'تلقائي',light:'فاتح',dark:'داكن'},
 say:(o)=>`أعلى سكر بيوصل له تقريبًا ${o.peak}، بعد ${o.at} دقيقة من الأكل. ${o.above>0?`وبيقعد فوق المية وثمانين حوالي ${o.above} دقيقة.`:'وما بيتعدى المية وثمانين.'} ولو غيّرت مثل ما اخترت، أعلى رقم بينزل لـ ${o.alt}.`,
-ex:{meal:'فطرت ٥ تمرات سلج وحبة صامولي وفنجالين قهوة',ift:'٣ تمرات خلاص وكاسة ماء',main:'صحن شوربة وسمبوسة ٢ وصحن كبسة',suh:'صحن فول وخبز وكاسة لبن'}},
-en:{dir:'ltr',brand:'Manhana',navMeal:'Your meal',navHow:'How it works',navRam:'Ramadan',dotSwap:'Swaps',dotTune:'Details',dotDates:'Dates',tipAfter:'after {m} min',h1:'What did you eat? See what it does to your sugar',lead:'Type your meal or say it out loud, the way you talk, and we draw what your blood sugar will do over the next four hours.',mealAria:'What did you eat',mic:'Say it',micStop:'Stop',go:'Calculate',listen:'Read it to me',listenStop:'Stop reading',chartAria:'Expected blood sugar curve',ramAria:'Blood sugar across a Ramadan day',
+ex:{meal:'فطرت ٥ تمرات سكري وحبة صامولي وفنجالين قهوة',ift:'٣ تمرات خلاص وكاسة ماء',main:'صحن شوربة وسمبوسة ٢ وصحن كبسة',suh:'صحن فول وخبز وكاسة لبن'}},
+en:{dir:'ltr',brand:'Manhana',navMeal:'Your meal',navHow:'How it works',navRam:'Ramadan',dotSwap:'Swaps',dotTune:'Details',dotDates:'Dates',tipAfter:'after {m} min',h1:'What did you eat? See what it does to your sugar',lead:'Any food or drink: kabsa, shawarma, dessert, juice, dates… type it or say it the way you talk, and we draw what your blood sugar will do over the next four hours.',mealAria:'What did you eat',mic:'Say it',micStop:'Stop',go:'Calculate',listen:'Read it to me',listenStop:'Stop reading',chartAria:'Expected blood sugar curve',ramAria:'Blood sugar across a Ramadan day',
 lgMeal:'Your meal',lgAlt:'If you change',lgMe:'Your own curve',lgRd:'Your readings',lgLim:'180 limit',lgPlan:'All at once',lgPlan2:'Split, with taraweeh walk',
 pf:{healthy:'Healthy',pre:'Prediabetes',t2d:'Type 2 diabetes'},
 howH:'Easy, four steps',s1h:'Say what you ate',s1p:'Type or talk naturally. We understand "a plate of kabsa" and "three dates" and count the carbs.',s2h:'See the curve',s2p:'The brown line is your sugar, hour by hour. The light band is normal; the red line is 180.',s3h:'Try "what if"',s3p:'Half the portion, a 15-minute walk, or Sukkari dates instead, and see the difference instantly.',s4h:'Tune it to your body',s4p:'If you have a glucose meter, enter your readings and we fit the curve to you.',
@@ -365,6 +370,7 @@ stReading:'One moment, reading your meal…',stDone:'Done. This is your expected
 sgH:'What could I eat instead? Tips for you',sgLead:'Small changes to your meal: a swap, a smaller portion, or a walk after eating. Each one is run through the same model and ranked by how much it lowers your peak.',sgGo:'Suggest',sgBusy:'One moment, finding swaps…',sgDoneAI:'Suggestions from AI, calculated with our model.',sgDoneLocal:'Built-in suggestions, calculated with our model.',sgNone:'Your meal is already light; no change lowers it clearly.',sgBest:'Best',sgPeak:'peak {a} instead of {b}',sgSmall:'small difference',sgShow:'Show on chart',sgShown:'Shown above',sgWalk:'+ {m} min walk',sgNote:'For awareness only; the numbers come from an approximate model. Discuss big changes in diet or activity with your doctor, especially if you take diabetes medicines.',
 kSwap:'Swap',kPortion:'Portion',kWalk:'Activity',kCombo:'Combo',
 loc:{swapDates:'Swap the dates for Sukkari',swapDatesW:'Sukkari has a GI of 43.4, among the lowest.',half:'Half the {f}',halfW:'{f} carries the most carbs in your meal.',walk:'Walk 30 minutes after eating',walkW:'Walking helps muscles pull sugar out of the blood.',brown:'Brown rice instead of white',brownW:'Brown rice raises sugar more slowly (estimated value).',combo:'Half the {f} plus a 15-minute walk',comboW:'Two small changes together make more difference.',fewer:'Cut the dates to two',fewerW:'The amount matters more than the variety.'},
+chipsL:['a plate of chicken kabsa and a glass of laban','shawarma and a pepsi','a slice of cake and tea','3 sukkari dates and coffee'],
 ramH:'Your day in Ramadan',ramLead:'Enter your iftar and suhoor and we draw your sugar from one afternoon to the next. See what happens if you split iftar and walk during taraweeh.',rIft:'Iftar (when you break the fast)',rMain:'Main meal after prayer',rMainN:'If you do not split, we count it with iftar.',rSuh:'Suhoor',rTime:'Time',ramGo:'Draw my day',rSplit:'Split: dates and water, then the meal after prayer',rWalk:'Walk 40 minutes during taraweeh',fast:'Fasting',
 rmPeak:'Highest after iftar',rmPeakS:'at {h}',rmPeak2:'If you split',rmPeak2S:'{d} lower',rmAbove:'Time above 180',rmAboveS:'across the day',rmSuh:'Highest after suhoor',
 ramWarn:'Lows during fasting mostly come from some diabetes medicines and insulin, and our model does not include medicines. Before Ramadan, assess your fasting risk with your doctor using the',ramLink:'IDF-DAR calculator',
@@ -373,7 +379,7 @@ mH:'How we calculate',m1:'A two-compartment gut model with the Bergman minimal m
 disc:'An educational approximation. It gives no medicine or insulin doses. Any treatment decision, especially fasting, belongs with your doctor.',
 theme:{auto:'Auto',light:'Light',dark:'Dark'},
 say:(o)=>`Your blood sugar should peak at about ${o.peak}, ${o.at} minutes after eating. ${o.above>0?`It stays above 180 for about ${o.above} minutes.`:'It stays under 180.'} With the changes you chose, the peak drops to ${o.alt}.`,
-ex:{meal:'5 sellaj dates, a samoli roll and 2 cups of Arabic coffee',ift:'3 khalas dates and a glass of water',main:'a bowl of soup, 2 samosas and a plate of kabsa',suh:'a plate of foul, bread and a glass of laban'}}};
+ex:{meal:'5 sukkari dates, a samoli roll and 2 cups of Arabic coffee',ift:'3 khalas dates and a glass of water',main:'a bowl of soup, 2 samosas and a plate of kabsa',suh:'a plate of foul, bread and a glass of laban'}}};
 
 const PROFILES={healthy:{Gb:90,SG:0.022,p2:0.035,SI:8e-4,Ib:8,n:0.12,beta:0.13},pre:{Gb:108,SG:0.016,p2:0.025,SI:3e-4,Ib:12,n:0.1,beta:0.06},t2d:{Gb:140,SG:0.012,p2:0.02,SI:1.5e-4,Ib:14,n:0.09,beta:0.035}};
 const DATES=[
@@ -383,8 +389,8 @@ const DATES=[
 {k:['برحي','برحى','barhi'],ar:'برحي',en:'Barhi',gi:49.7,c:'ae2'},{k:['دباس','dabbas'],ar:'دباس',en:'Dabbas',gi:49.1,c:'ae'},{k:['بومعان','بو معان','bo maan',"bo ma'an"],ar:'بومعان',en:"Bo Ma'an",gi:46.3,c:'ae'},{k:['صقعي','صقعى','saqie','sagai'],ar:'صقعي',en:"Sag'ai",gi:44.6,c:'sa'},{k:['سكري','سكرى','sukkari','sukkary'],ar:'سكري',en:'Sukkari',gi:43.4,c:'sa'},{k:['شقراء','شقرا','shaqra'],ar:'شقراء',en:'Shaqra',gi:42.8,c:'sa'}];
 const SRCS={sa:{ar:'جامعة القصيم ٢٠١٦',en:'Qassim Univ. 2016',url:'https://pubmed.ncbi.nlm.nih.gov/27920411/'},ae:{ar:'جامعة الإمارات ٢٠١١',en:'UAE Univ. 2011',url:'https://pubmed.ncbi.nlm.nih.gov/21619670/'},ae2:{ar:'دراسة إماراتية ٢٠٠٢',en:'UAE study 2002',url:'https://www.researchgate.net/publication/11303354_Glycemic_index_of_3_varieties_of_dates'}};
 const OTHER_DATES=[['جالكسي','جلاكسي','قلاكسي','galaxy'],['صفري','safri'],['منيفي','munifi'],['نبوت سيف','nabut']];
-const FOODS=[{k:['صامولي','صامولة','samoli'],ar:'صامولي',en:'Samoli roll',u:['حبة','roll'],c:30,gi:75},{k:['خبز','تميس','bread'],ar:'خبز',en:'Bread',u:['رغيف','loaf'],c:35,gi:72},{k:['كبسة','رز','أرز','مندي','kabsa','rice','mandi'],ar:'رز (كبسة/مندي)',en:'Rice (kabsa/mandi)',u:['صحن','plate'],c:65,gi:68},{k:['سمبوسة','سمبوسه','samosa'],ar:'سمبوسة',en:'Samosa',u:['حبة','piece'],c:10,gi:60},{k:['لقيمات','luqaimat'],ar:'لقيمات',en:'Luqaimat',u:['حبة','piece'],c:8,gi:70},{k:['شوربة','شوربه','soup'],ar:'شوربة شوفان',en:'Oat soup',u:['صحن','bowl'],c:20,gi:55},{k:['فول','foul','fava'],ar:'فول',en:'Foul (fava beans)',u:['صحن','plate'],c:25,gi:40},{k:['لبن','laban'],ar:'لبن',en:'Laban',u:['كاسة','glass'],c:12,gi:35},{k:['حليب','milk'],ar:'حليب',en:'Milk',u:['كوب','glass'],c:12,gi:35},{k:['عصير','juice'],ar:'عصير',en:'Juice',u:['كوب','glass'],c:26,gi:50},{k:['فيمتو','vimto'],ar:'فيمتو',en:'Vimto',u:['كاسة','glass'],c:30,gi:70},{k:['شاي','tea'],ar:'شاي بسكر',en:'Sweet tea',u:['كاسة','cup'],c:8,gi:65},{k:['هريس','harees'],ar:'هريس',en:'Harees',u:['صحن','plate'],c:40,gi:50},{k:['قهوة','فنجال','coffee'],ar:'قهوة عربية',en:'Arabic coffee',u:['فنجال','cup'],c:0,gi:0},{k:['ماء','موية','water'],ar:'ماء',en:'Water',u:['كاسة','glass'],c:0,gi:0}];
-const NUMW={'تمرتين':2,'حبة':1,'حبه':1,'واحد':1,'فنجالين':2,'حبتين':2,'ثنتين':2,'اثنين':2,'كاستين':2,'صحنين':2,'ثلاث':3,'أربع':4,'اربع':4,'خمس':5,'ست':6,'سبع':7,'عشر':10,'one':1,'a ':1,'two':2,'three':3,'four':4,'five':5,'six':6};
+const FOODS=[{k:['صامولي','صامولة','samoli'],ar:'صامولي',en:'Samoli roll',u:['حبة','roll'],c:30,gi:75},{k:['خبز','تميس','bread'],ar:'خبز',en:'Bread',u:['رغيف','loaf'],c:35,gi:72},{k:['كبسة','رز','أرز','مندي','kabsa','rice','mandi'],ar:'رز (كبسة/مندي)',en:'Rice (kabsa/mandi)',u:['صحن','plate'],c:65,gi:68},{k:['سمبوسة','سمبوسه','samosa'],ar:'سمبوسة',en:'Samosa',u:['حبة','piece'],c:10,gi:60},{k:['لقيمات','luqaimat'],ar:'لقيمات',en:'Luqaimat',u:['حبة','piece'],c:8,gi:70},{k:['شوربة','شوربه','soup'],ar:'شوربة شوفان',en:'Oat soup',u:['صحن','bowl'],c:20,gi:55},{k:['فول','foul','fava'],ar:'فول',en:'Foul (fava beans)',u:['صحن','plate'],c:25,gi:40},{k:['لبن','laban'],ar:'لبن',en:'Laban',u:['كاسة','glass'],c:12,gi:35},{k:['حليب','milk'],ar:'حليب',en:'Milk',u:['كوب','glass'],c:12,gi:35},{k:['عصير','juice'],ar:'عصير',en:'Juice',u:['كوب','glass'],c:26,gi:50},{k:['فيمتو','vimto'],ar:'فيمتو',en:'Vimto',u:['كاسة','glass'],c:30,gi:70},{k:['شاي','tea'],ar:'شاي بسكر',en:'Sweet tea',u:['كاسة','cup'],c:8,gi:65},{k:['هريس','harees'],ar:'هريس',en:'Harees',u:['صحن','plate'],c:40,gi:50},{k:['قهوة','فنجال','coffee'],ar:'قهوة عربية',en:'Arabic coffee',u:['فنجال','cup'],c:0,gi:0},{k:['شاورما','shawarma'],ar:'شاورما',en:'Shawarma',u:['ساندويتش','wrap'],c:45,gi:65},{k:['بيبسي','كولا','غازي','pepsi','cola','soda'],ar:'مشروب غازي',en:'Soft drink',u:['علبة','can'],c:39,gi:63},{k:['كيكة','كيك','cake'],ar:'كيكة',en:'Cake',u:['قطعة','slice'],c:35,gi:65},{k:['بيتزا','pizza'],ar:'بيتزا',en:'Pizza',u:['قطعة','slice'],c:30,gi:60},{k:['برجر','برقر','burger'],ar:'برجر',en:'Burger',u:['حبة','burger'],c:40,gi:66},{k:['بطاطس','بطاطا','fries','potato'],ar:'بطاطس',en:'Fries',u:['حبة','portion'],c:45,gi:70},{k:['ماء','موية','water'],ar:'ماء',en:'Water',u:['كاسة','glass'],c:0,gi:0}];
+const NUMW={'قطعة':1,'علبة':1,'تمرتين':2,'حبة':1,'حبه':1,'واحد':1,'فنجالين':2,'حبتين':2,'ثنتين':2,'اثنين':2,'كاستين':2,'صحنين':2,'ثلاث':3,'أربع':4,'اربع':4,'خمس':5,'ست':6,'سبع':7,'عشر':10,'one':1,'a ':1,'two':2,'three':3,'four':4,'five':5,'six':6};
 
 let lang='ar',theme='auto',profile='t2d',items=[],fitted=null,animate=true,ramPlan=null,ramAlt=null,lastSay='';
 const viewerTheme=document.documentElement.getAttribute('data-theme');
@@ -486,7 +492,7 @@ const countUp=root=>{if(!animate||RM)return;let i=0;for(const b of root.querySel
 const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
 
 // ---------- main meal ----------
-const READ_T=[0,30,60,120,180],EXAMPLE={0:146,30:203,60:268,120:274,180:208};
+const READ_T=[0,30,60,120,180],EXAMPLE={0:146,30:190,60:247,120:241,180:196};
 const readings=()=>READ_T.map(t=>({t,g:+$('r'+t).value})).filter(r=>r.g>=40&&r.g<=500);
 let altOverride=null;
 const whatIf=()=>altOverride?altOverride.items:items.map(it=>({...it,carbs:it.carbs*($('wHalf').checked?0.5:1),gi:$('wSwap').checked&&(/^study|avg/.test(it.source)||/تمر|date/i.test(it.name))?43.4:it.gi}));
@@ -511,6 +517,7 @@ const run=async()=>{const text=$('mealTxt').value.trim();if(!text){$('status').t
   altOverride=null;sugs=localSugs();renderSugs();$('sgStatus').textContent='';
   $('parsedBy').textContent=r.by==='ai'?S().byAI:S().byLocal;renderItems();drawMain();$('fitNote').textContent=S().calEx};
 $('go').addEventListener('click',run);
+$('chips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('mealTxt').value=b.textContent;run()});
 const fit=()=>{const p=PROFILES[profile],R=readings();if(R.length<2){$('fitNote').textContent=S().calNeed;return}
   const r0=R.find(r=>r.t===0),Gb=r0?r0.g:p.Gb,mae=s=>R.reduce((a,r)=>a+Math.abs(s[r.t].g-r.g),0)/R.length;
   const base=mae(sim(p,[{t:0,items}],[],240));let best={e:Infinity};
@@ -579,13 +586,14 @@ const drawSky=()=>{const s=$('sky'),W=s.clientWidth||1200;let seed=7,g='';const 
   s.innerHTML=g};
 
 // ---------- language, theme, font ----------
-const applyLang=()=>{const s=S();document.documentElement.lang=lang;document.documentElement.dir=s.dir;document.title=lang==='ar'?'منحنى التمر':'Manhana';
+const applyLang=()=>{const s=S();document.documentElement.lang=lang;document.documentElement.dir=s.dir;document.title=lang==='ar'?'منحنى':'Manhana';
   for(const el of document.querySelectorAll('[data-t]')){const v=s[el.dataset.t];if(typeof v==='string')el.textContent=v}
   for(const el of document.querySelectorAll('[data-ta]'))el.setAttribute('aria-label',s[el.dataset.ta]);
   $('bLang').textContent=lang==='ar'?'EN':'ع';$('bLang').setAttribute('aria-label',lang==='ar'?'English':'العربية');
   $('profiles').innerHTML=Object.keys(PROFILES).map(k=>`<button type="button" data-p="${k}" aria-pressed="${k===profile}">${esc(s.pf[k])}</button>`).join('');
   $('readings').innerHTML=READ_T.map(t=>`<div><label for="r${t}">${esc(t?tr('rdT',{m:num(t)}):s.rd0)}</label><input id="r${t}" type="number" inputmode="numeric" min="40" max="500" value="${EXAMPLE[t]}"></div>`).join('');
   $('gi').innerHTML=`<thead><tr><th>${esc(S().thFood)}</th><th></th><th class="n">${esc(S().thGi)}</th><th>${esc(S().thSrc)}</th></tr></thead><tbody>`+DATES.map(d=>`<tr><td>${esc(nameOf(d))}</td><td style="width:34%"><div style="height:10px;border-radius:5px;background:${d.gi>=55?'var(--date)':'color-mix(in srgb,var(--date) 55%,transparent)'};width:${(d.gi/74.6*100).toFixed(1)}%"></div></td><td class="n">${d.gi.toLocaleString(lang==='ar'?'ar-SA':'en-US',{maximumFractionDigits:1})}</td><td><a class="note" href="${SRCS[d.c].url}">${esc(SRCS[d.c][lang])}</a></td></tr>`).join('')+'</tbody>';
+  $('chips').innerHTML=s.chipsL.map(c=>`<button type="button">${esc(c)}</button>`).join('');
   $('mealTxt').value=s.ex.meal;$('rIft').value=s.ex.ift;$('rMain').value=s.ex.main;$('rSuh').value=s.ex.suh;
   items=localParse(s.ex.meal);ram={ift:localParse(s.ex.ift),main:localParse(s.ex.main),suh:localParse(s.ex.suh)};fitted=null;
   $('parsedBy').textContent=s.byEx;$('status').textContent='';$('ramStatus').textContent='';$('fitNote').textContent=s.calEx;
