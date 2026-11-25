@@ -45,3 +45,11 @@ netlify/functions/ai.mjs    خادم الذكاء الاصطناعي (يحفظ �
 netlify.toml                إعدادات النشر
 research/model.js           النموذج المرجعي لاختبار المعاملات
 ```
+
+## الخطوط
+
+- **الخط السعودي (SaudiWeb Bold)** و**حرف النسيب (Alnaseeb)** من وزارة الثقافة السعودية، متاحة مجانًا للأفراد والجهات عبر منصة الخطوط: https://engage.moc.gov.sa/fonts
+- IBM Plex Sans Arabic من Google Fonts.
+
+ملفات الخطوط في مجلد `fonts/` حقوقها لأصحابها وتخضع لشروط وزارة الثقافة.
+
