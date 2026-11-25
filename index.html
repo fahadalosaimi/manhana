@@ -15,9 +15,11 @@
    COLOUR date brown dominant, sand support, crimson accent for high readings, teal for "your curve"; Ramadan band fixed night indigo
    TYPE Readex Pro display + IBM Plex Sans Arabic text
    LAYOUT laptop: woven nav, title + meal box, full-width chart, stat row; steps; items | calibration; Ramadan night band; phone: stacked in that order */
-:root{color-scheme:light dark;--bg:light-dark(#fffdf9,#120d0a);--ink:light-dark(#1d140e,#f5ede4);--mute:light-dark(#6a5a4d,#bfae9c);--date:light-dark(#5a2d13,#e3a56b);--date2:light-dark(#8f4f26,#b97842);--sand:light-dark(#f6ecdd,#1f1712);--card:light-dark(#ffffff,#1a130f);--line:light-dark(#e6d7c3,#3a2c21);--hi:light-dark(#c8243a,#ff6b7d);--b:light-dark(#3d5a73,#93b8d6);--me:light-dark(#137a68,#5fd6be);--onDate:light-dark(#fffdf9,#120d0a);--gold:light-dark(#d9992a,#ecb95c)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-html:root[data-mn-theme=light]{color-scheme:light}html:root[data-mn-theme=dark]{color-scheme:dark}
+:root{color-scheme:light;--bg:#fffdf9;--ink:#1d140e;--mute:#6a5a4d;--date:#5a2d13;--date2:#8f4f26;--sand:#f6ecdd;--card:#ffffff;--line:#e6d7c3;--hi:#c8243a;--b:#3d5a73;--me:#137a68;--onDate:#fffdf9;--gold:#d9992a}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#120d0a;--ink:#f5ede4;--mute:#bfae9c;--date:#e3a56b;--date2:#b97842;--sand:#1f1712;--card:#1a130f;--line:#3a2c21;--hi:#ff6b7d;--b:#93b8d6;--me:#5fd6be;--onDate:#120d0a;--gold:#ecb95c}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#120d0a;--ink:#f5ede4;--mute:#bfae9c;--date:#e3a56b;--date2:#b97842;--sand:#1f1712;--card:#1a130f;--line:#3a2c21;--hi:#ff6b7d;--b:#93b8d6;--me:#5fd6be;--onDate:#120d0a;--gold:#ecb95c}
+html:root[data-mn-theme=light]{color-scheme:light;--bg:#fffdf9;--ink:#1d140e;--mute:#6a5a4d;--date:#5a2d13;--date2:#8f4f26;--sand:#f6ecdd;--card:#ffffff;--line:#e6d7c3;--hi:#c8243a;--b:#3d5a73;--me:#137a68;--onDate:#fffdf9;--gold:#d9992a}
+html:root[data-mn-theme=dark]{color-scheme:dark;--bg:#120d0a;--ink:#f5ede4;--mute:#bfae9c;--date:#e3a56b;--date2:#b97842;--sand:#1f1712;--card:#1a130f;--line:#3a2c21;--hi:#ff6b7d;--b:#93b8d6;--me:#5fd6be;--onDate:#120d0a;--gold:#ecb95c}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
 html{scroll-padding-top:var(--navh,80px);scroll-behavior:smooth}
